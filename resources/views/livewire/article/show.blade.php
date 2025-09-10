@@ -226,12 +226,11 @@
                             </x-ui-button>
                         </div>
                         @if($article->attributes->count() > 0)
-                            <div class="space-y-2">
+                            <div class="flex flex-wrap gap-2">
                                 @foreach($article->attributes as $attribute)
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-sm font-medium text-gray-700">{{ $attribute->name }}:</span>
-                                        <span class="text-sm text-gray-900">{{ $attribute->pivot->value }}</span>
-                                    </div>
+                                    <x-ui-badge variant="primary" size="sm">
+                                        {{ $attribute->name }}
+                                    </x-ui-badge>
                                 @endforeach
                             </div>
                         @else
@@ -413,16 +412,17 @@
                 @endforeach
             </div>
         @elseif($modalType === 'attribute')
-            <div class="space-y-3">
+            <div class="space-y-2">
                 @foreach($this->availableAttributes as $attribute)
                     <div class="d-flex items-center gap-2">
-                        <label class="text-sm w-32">{{ $attribute->name }}:</label>
                         <input 
-                            type="text" 
-                            wire:model.live="attributeValues.{{ $attribute->id }}"
-                            class="flex-1 border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary"
-                            placeholder="Wert eingeben"
+                            type="checkbox" 
+                            id="attribute_{{ $attribute->id }}"
+                            wire:model.live="selectedAttributes"
+                            value="{{ $attribute->id }}"
+                            class="rounded border-gray-300"
                         >
+                        <label for="attribute_{{ $attribute->id }}" class="text-sm">{{ $attribute->name }}</label>
                     </div>
                 @endforeach
             </div>

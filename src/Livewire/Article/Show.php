@@ -32,7 +32,7 @@ class Show extends Component
     // Relationship management
     public $selectedAllergens = [];
     public $selectedAdditives = [];
-    public $attributeValues = [];
+    public $selectedAttributes = [];
     
     // Settings Form
     public $settingsForm = [
@@ -63,7 +63,7 @@ class Show extends Component
         // Relationship data initialisieren
         $this->selectedAllergens = $this->article->allergens->pluck('id')->toArray();
         $this->selectedAdditives = $this->article->additives->pluck('id')->toArray();
-        $this->attributeValues = $this->article->attributes->pluck('pivot.value', 'id')->toArray();
+        $this->selectedAttributes = $this->article->attributes->pluck('id')->toArray();
     }
 
     public function updated($propertyName)
@@ -129,13 +129,7 @@ class Show extends Component
                 break;
                 
             case 'attribute':
-                $attributeData = [];
-                foreach ($this->attributeValues as $attributeId => $value) {
-                    if (!empty($value)) {
-                        $attributeData[$attributeId] = ['value' => $value];
-                    }
-                }
-                $this->article->attributes()->sync($attributeData);
+                $this->article->attributes()->sync($this->selectedAttributes);
                 $this->article->load(['attributes']);
                 session()->flash('message', 'Attribute erfolgreich gespeichert.');
                 break;
