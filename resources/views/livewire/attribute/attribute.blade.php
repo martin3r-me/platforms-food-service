@@ -48,7 +48,7 @@
                     <x-ui-input-select
                         name="attribute.parent_id"
                         label="Parent"
-                        :options="\\Platform\\FoodService\\Models\\FsAttribute::orderBy('name')->get()"
+                        :options="$this->parentOptions"
                         optionValue="id"
                         optionLabel="name"
                         :nullable="true"

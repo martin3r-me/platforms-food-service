@@ -48,7 +48,7 @@
                     <x-ui-input-select
                         name="additive.parent_id"
                         label="Parent"
-                        :options="\\Platform\\FoodService\\Models\\FsAdditive::orderBy('name')->get()"
+                        :options="$this->parentOptions"
                         optionValue="id"
                         optionLabel="name"
                         :nullable="true"

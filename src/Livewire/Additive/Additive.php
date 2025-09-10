@@ -58,6 +58,14 @@ class Additive extends Component
             'additive' => $this->additive,
         ])->layout('platform::layouts.app');
     }
+
+    public function getParentOptionsProperty()
+    {
+        return FsAdditive::query()
+            ->when($this->additive?->id, fn ($q) => $q->where('id', '!=', $this->additive->id))
+            ->orderBy('name')
+            ->get();
+    }
 }
 
 

@@ -49,6 +49,16 @@
             <x-ui-input-text name="name" label="Name" wire:model.live="name" required />
             <x-ui-input-textarea name="description" label="Description" wire:model.live="description" rows="3" />
             <x-ui-input-checkbox model="is_strict" checked-label="Strict (hard)" unchecked-label="Strict (hard)" />
+            <x-ui-input-select
+                name="parent_id"
+                label="Parent"
+                :options="\Platform\FoodService\Models\FsAllergen::orderBy('name')->get()"
+                optionValue="id"
+                optionLabel="name"
+                :nullable="true"
+                nullLabel="– None –"
+                wire:model.live="parent_id"
+            />
         </form>
 
         <x-slot name="footer">

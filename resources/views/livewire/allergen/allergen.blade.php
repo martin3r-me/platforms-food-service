@@ -51,7 +51,7 @@
                     <x-ui-input-select
                         name="allergen.parent_id"
                         label="Parent"
-                        :options="\\Platform\\FoodService\\Models\\FsAllergen::orderBy('name')->get()"
+                        :options="$this->parentOptions"
                         optionValue="id"
                         optionLabel="name"
                         :nullable="true"

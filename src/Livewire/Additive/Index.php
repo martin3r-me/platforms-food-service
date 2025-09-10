@@ -11,6 +11,7 @@ class Index extends Component
     public string $name = '';
     public ?string $description = null;
     public bool $is_strict = false;
+    public ?int $parent_id = null;
 
     protected function rules(): array
     {
@@ -18,13 +19,14 @@ class Index extends Component
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'is_strict' => ['boolean'],
+            'parent_id' => ['nullable', 'integer', 'exists:fs_additives,id'],
         ];
     }
 
     public function openCreateModal(): void
     {
         $this->resetValidation();
-        $this->reset(['name', 'description', 'is_strict']);
+        $this->reset(['name', 'description', 'is_strict', 'parent_id']);
         $this->modalShow = true;
     }
 
@@ -42,6 +44,7 @@ class Index extends Component
             'description' => $this->description,
             'is_strict' => $this->is_strict,
             'is_active' => true,
+            'parent_id' => $this->parent_id,
         ]);
 
         $this->closeCreateModal();

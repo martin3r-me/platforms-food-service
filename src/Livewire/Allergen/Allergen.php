@@ -58,6 +58,14 @@ class Allergen extends Component
             'allergen' => $this->allergen,
         ])->layout('platform::layouts.app');
     }
+
+    public function getParentOptionsProperty()
+    {
+        return FsAllergen::query()
+            ->when($this->allergen?->id, fn ($q) => $q->where('id', '!=', $this->allergen->id))
+            ->orderBy('name')
+            ->get();
+    }
 }
 
 

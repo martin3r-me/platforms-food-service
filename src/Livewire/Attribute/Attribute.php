@@ -58,6 +58,14 @@ class Attribute extends Component
             'attribute' => $this->attribute,
         ])->layout('platform::layouts.app');
     }
+
+    public function getParentOptionsProperty()
+    {
+        return FsAttribute::query()
+            ->when($this->attribute?->id, fn ($q) => $q->where('id', '!=', $this->attribute->id))
+            ->orderBy('name')
+            ->get();
+    }
 }
 
 
