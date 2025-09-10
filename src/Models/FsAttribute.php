@@ -1,0 +1,52 @@
+<?php
+
+namespace Platform\FoodService\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Platform\ActivityLog\Traits\LogsActivity;
+use Symfony\Component\Uid\UuidV7;
+
+class FsAttribute extends Model
+{
+    use SoftDeletes, LogsActivity;
+    protected $table = 'fs_attributes';
+
+    protected $fillable = [
+        'uuid',
+        'name',
+        'description',
+        'is_strict',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_strict' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $model) {
+            if (empty($model->uuid)) {
+                do {
+                    $uuid = UuidV7::generate();
+                } while (self::where('uuid', $uuid)->exists());
+
+                $model->uuid = $uuid;
+            }
+        });
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+}
+
+

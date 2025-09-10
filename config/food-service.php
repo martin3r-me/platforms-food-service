@@ -1,38 +1,24 @@
 <?php
 
 return [
-    'name' => 'Food Service',
-    'description' => 'Food Service Module',
-    'version' => '1.0.0',
-    
     'routing' => [
+        // analog zu crm: mode/prefix werden vom ModuleRouter ausgewertet
+        'mode' => env('FOODSERVICE_MODE', 'subdomain'),
         'prefix' => 'food-service',
-        'middleware' => ['web', 'auth'],
     ],
-    
+
     'guard' => 'web',
-    
+
+    // Haupteintrag in der Modul-Navigation
     'navigation' => [
-        'main' => [
-            'food-service' => [
-                'title' => 'Food Service',
-                'icon' => 'heroicon-o-cake',
-                'route' => 'food-service.dashboard',
-            ],
-        ],
+        'route' => 'food-service.dashboard',
+        'icon'  => 'heroicon-o-cake',
+        'order' => 40,
     ],
-    
+
+    // Optional: Sidebar-Metadaten
     'sidebar' => [
-        'food-service' => [
-            'title' => 'Food Service',
-            'icon' => 'heroicon-o-cake',
-            'items' => [
-                'dashboard' => [
-                    'title' => 'Dashboard',
-                    'route' => 'food-service.dashboard',
-                    'icon' => 'heroicon-o-home',
-                ],
-            ],
-        ],
+        'title' => 'Food Service',
+        'icon'  => 'heroicon-o-cake',
     ],
 ];
