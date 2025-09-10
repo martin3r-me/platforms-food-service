@@ -53,7 +53,6 @@ class Brand extends Component
             ->get();
 
         return view('foodservice::livewire.brand.brand', [
-            'brand' => $this->brand,
             'manufacturers' => $manufacturers,
         ])->layout('platform::layouts.app');
     }
