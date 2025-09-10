@@ -40,34 +40,6 @@
         <form wire:submit.prevent="createItem" class="space-y-4">
             <x-ui-input-text name="name" label="Name" wire:model.live="name" required />
             <x-ui-input-textarea name="description" label="Description" wire:model.live="description" rows="3" />
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Manufacturers</label>
-                <div class="space-y-2 max-h-40 overflow-y-auto border border-gray-200 rounded-md p-2">
-                    @forelse($manufacturers as $manufacturer)
-                        <div class="d-flex items-center gap-2">
-                            <x-ui-input-checkbox 
-                                wire:model.live="selectedManufacturers" 
-                                value="{{ $manufacturer->id }}"
-                                size="sm"
-                            />
-                            <span class="text-sm">{{ $manufacturer->name }}</span>
-                            @if(in_array($manufacturer->id, $selectedManufacturers))
-                                <x-ui-input-checkbox 
-                                    wire:model.live="primaryManufacturer" 
-                                    value="{{ $manufacturer->id }}"
-                                    size="sm"
-                                    class="ml-auto"
-                                />
-                                <span class="text-xs text-muted">Primary</span>
-                            @endif
-                        </div>
-                    @empty
-                        <div class="text-sm text-muted">No manufacturers available</div>
-                    @endforelse
-                </div>
-            </div>
-            
             <x-ui-input-checkbox model="is_active" checked-label="Active" unchecked-label="Inactive" />
         </form>
 
