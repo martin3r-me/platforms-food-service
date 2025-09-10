@@ -170,17 +170,17 @@
 
             <!-- Allergene, Zusatzstoffe und Attribute -->
             <div class="mb-6">
-                <div class="d-flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-secondary">Allergene, Zusatzstoffe und Attribute</h3>
-                    <x-ui-button variant="primary" size="sm" wire:click="$set('manageModalShow', true)">
-                        @svg('heroicon-o-plus', 'w-4 h-4 mr-2')
-                        Verwalten
-                    </x-ui-button>
-                </div>
+                <h3 class="text-lg font-semibold mb-4 text-secondary">Allergene, Zusatzstoffe und Attribute</h3>
                 <div class="space-y-4">
                     <!-- Allergene -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Allergene</label>
+                        <div class="d-flex items-center justify-between mb-2">
+                            <label class="block text-sm font-medium text-gray-700">Allergene</label>
+                            <x-ui-button variant="primary" size="sm" wire:click="$set('allergenModalShow', true)">
+                                @svg('heroicon-o-plus', 'w-4 h-4 mr-1')
+                                Verwalten
+                            </x-ui-button>
+                        </div>
                         @if($article->allergens->count() > 0)
                             <div class="flex flex-wrap gap-2">
                                 @foreach($article->allergens as $allergen)
@@ -196,7 +196,13 @@
 
                     <!-- Zusatzstoffe -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Zusatzstoffe</label>
+                        <div class="d-flex items-center justify-between mb-2">
+                            <label class="block text-sm font-medium text-gray-700">Zusatzstoffe</label>
+                            <x-ui-button variant="primary" size="sm" wire:click="$set('additiveModalShow', true)">
+                                @svg('heroicon-o-plus', 'w-4 h-4 mr-1')
+                                Verwalten
+                            </x-ui-button>
+                        </div>
                         @if($article->additives->count() > 0)
                             <div class="flex flex-wrap gap-2">
                                 @foreach($article->additives as $additive)
@@ -212,7 +218,13 @@
 
                     <!-- Attribute -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Attribute</label>
+                        <div class="d-flex items-center justify-between mb-2">
+                            <label class="block text-sm font-medium text-gray-700">Attribute</label>
+                            <x-ui-button variant="primary" size="sm" wire:click="$set('attributeModalShow', true)">
+                                @svg('heroicon-o-plus', 'w-4 h-4 mr-1')
+                                Verwalten
+                            </x-ui-button>
+                        </div>
                         @if($article->attributes->count() > 0)
                             <div class="space-y-2">
                                 @foreach($article->attributes as $attribute)
@@ -353,71 +365,28 @@
         </div>
     </div>
 
-    <!-- Manage Modal -->
-    <x-ui-modal wire:model="manageModalShow" size="lg">
+    <!-- Allergen Modal -->
+    <x-ui-modal wire:model="allergenModalShow" size="md">
         <x-slot name="header">
             <div class="d-flex items-center gap-2">
-                @svg('heroicon-o-cog-6-tooth', 'w-6 h-6 text-primary')
-                Allergene, Zusatzstoffe und Attribute verwalten
+                @svg('heroicon-o-exclamation-triangle', 'w-6 h-6 text-warning')
+                Allergene verwalten
             </div>
         </x-slot>
 
-        <div class="space-y-6">
-            <!-- Allergene -->
-            <div>
-                <h4 class="font-semibold mb-3">Allergene</h4>
-                <div class="space-y-2">
-                    @foreach($this->availableAllergens as $allergen)
-                        <div class="d-flex items-center gap-2">
-                            <input 
-                                type="checkbox" 
-                                id="allergen_{{ $allergen->id }}"
-                                wire:model.live="selectedAllergens"
-                                value="{{ $allergen->id }}"
-                                class="rounded border-gray-300"
-                            >
-                            <label for="allergen_{{ $allergen->id }}" class="text-sm">{{ $allergen->name }}</label>
-                        </div>
-                    @endforeach
+        <div class="space-y-2">
+            @foreach($this->availableAllergens as $allergen)
+                <div class="d-flex items-center gap-2">
+                    <input 
+                        type="checkbox" 
+                        id="allergen_{{ $allergen->id }}"
+                        wire:model.live="selectedAllergens"
+                        value="{{ $allergen->id }}"
+                        class="rounded border-gray-300"
+                    >
+                    <label for="allergen_{{ $allergen->id }}" class="text-sm">{{ $allergen->name }}</label>
                 </div>
-            </div>
-
-            <!-- Zusatzstoffe -->
-            <div>
-                <h4 class="font-semibold mb-3">Zusatzstoffe</h4>
-                <div class="space-y-2">
-                    @foreach($this->availableAdditives as $additive)
-                        <div class="d-flex items-center gap-2">
-                            <input 
-                                type="checkbox" 
-                                id="additive_{{ $additive->id }}"
-                                wire:model.live="selectedAdditives"
-                                value="{{ $additive->id }}"
-                                class="rounded border-gray-300"
-                            >
-                            <label for="additive_{{ $additive->id }}" class="text-sm">{{ $additive->name }}</label>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-
-            <!-- Attribute -->
-            <div>
-                <h4 class="font-semibold mb-3">Attribute</h4>
-                <div class="space-y-3">
-                    @foreach($this->availableAttributes as $attribute)
-                        <div class="d-flex items-center gap-2">
-                            <label class="text-sm w-32">{{ $attribute->name }}:</label>
-                            <input 
-                                type="text" 
-                                wire:model.live="attributeValues.{{ $attribute->id }}"
-                                class="flex-1 border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary"
-                                placeholder="Wert eingeben"
-                            >
-                        </div>
-                    @endforeach
-                </div>
-            </div>
+            @endforeach
         </div>
 
         <x-slot name="footer">
@@ -425,14 +394,101 @@
                 <x-ui-button
                     type="button"
                     variant="secondary-outline"
-                    @click="$wire.manageModalShow = false"
+                    @click="$wire.allergenModalShow = false"
                 >
                     Abbrechen
                 </x-ui-button>
                 <x-ui-button
                     type="submit"
                     variant="primary"
-                    wire:click="saveRelationships"
+                    wire:click="saveAllergens"
+                >
+                    Speichern
+                </x-ui-button>
+            </div>
+        </x-slot>
+    </x-ui-modal>
+
+    <!-- Additive Modal -->
+    <x-ui-modal wire:model="additiveModalShow" size="md">
+        <x-slot name="header">
+            <div class="d-flex items-center gap-2">
+                @svg('heroicon-o-beaker', 'w-6 h-6 text-info')
+                Zusatzstoffe verwalten
+            </div>
+        </x-slot>
+
+        <div class="space-y-2">
+            @foreach($this->availableAdditives as $additive)
+                <div class="d-flex items-center gap-2">
+                    <input 
+                        type="checkbox" 
+                        id="additive_{{ $additive->id }}"
+                        wire:model.live="selectedAdditives"
+                        value="{{ $additive->id }}"
+                        class="rounded border-gray-300"
+                    >
+                    <label for="additive_{{ $additive->id }}" class="text-sm">{{ $additive->name }}</label>
+                </div>
+            @endforeach
+        </div>
+
+        <x-slot name="footer">
+            <div class="d-flex justify-end gap-3">
+                <x-ui-button
+                    type="button"
+                    variant="secondary-outline"
+                    @click="$wire.additiveModalShow = false"
+                >
+                    Abbrechen
+                </x-ui-button>
+                <x-ui-button
+                    type="submit"
+                    variant="primary"
+                    wire:click="saveAdditives"
+                >
+                    Speichern
+                </x-ui-button>
+            </div>
+        </x-slot>
+    </x-ui-modal>
+
+    <!-- Attribute Modal -->
+    <x-ui-modal wire:model="attributeModalShow" size="md">
+        <x-slot name="header">
+            <div class="d-flex items-center gap-2">
+                @svg('heroicon-o-tag', 'w-6 h-6 text-primary')
+                Attribute verwalten
+            </div>
+        </x-slot>
+
+        <div class="space-y-3">
+            @foreach($this->availableAttributes as $attribute)
+                <div class="d-flex items-center gap-2">
+                    <label class="text-sm w-32">{{ $attribute->name }}:</label>
+                    <input 
+                        type="text" 
+                        wire:model.live="attributeValues.{{ $attribute->id }}"
+                        class="flex-1 border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary"
+                        placeholder="Wert eingeben"
+                    >
+                </div>
+            @endforeach
+        </div>
+
+        <x-slot name="footer">
+            <div class="d-flex justify-end gap-3">
+                <x-ui-button
+                    type="button"
+                    variant="secondary-outline"
+                    @click="$wire.attributeModalShow = false"
+                >
+                    Abbrechen
+                </x-ui-button>
+                <x-ui-button
+                    type="submit"
+                    variant="primary"
+                    wire:click="saveAttributes"
                 >
                     Speichern
                 </x-ui-button>

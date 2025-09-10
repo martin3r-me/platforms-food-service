@@ -22,8 +22,10 @@ class Show extends Component
     // Settings Modal
     public $settingsModalShow = false;
     
-    // Manage Modal
-    public $manageModalShow = false;
+    // Modals
+    public $allergenModalShow = false;
+    public $additiveModalShow = false;
+    public $attributeModalShow = false;
     
     // Track if form is dirty
     public $isDirty = false;
@@ -76,6 +78,7 @@ class Show extends Component
             'article.name' => 'required|string|max:255',
             'article.article_number' => 'nullable|string|max:255|unique:fs_articles,article_number,' . $this->article->id,
             'article.ean' => 'nullable|string|max:255',
+            'article.is_active' => 'boolean',
             'settingsForm.description' => 'nullable|string',
             'settingsForm.is_active' => 'boolean',
         ];
@@ -99,15 +102,26 @@ class Show extends Component
         return redirect()->route('foodservice.articles.index');
     }
 
-    public function saveRelationships()
+    public function saveAllergens()
     {
-        // Allergene synchronisieren
         $this->article->allergens()->sync($this->selectedAllergens);
+        $this->article->load(['allergens']);
         
-        // Zusatzstoffe synchronisieren
+        $this->allergenModalShow = false;
+        session()->flash('message', 'Allergene erfolgreich gespeichert.');
+    }
+
+    public function saveAdditives()
+    {
         $this->article->additives()->sync($this->selectedAdditives);
+        $this->article->load(['additives']);
         
-        // Attribute synchronisieren (mit Werten)
+        $this->additiveModalShow = false;
+        session()->flash('message', 'Zusatzstoffe erfolgreich gespeichert.');
+    }
+
+    public function saveAttributes()
+    {
         $attributeData = [];
         foreach ($this->attributeValues as $attributeId => $value) {
             if (!empty($value)) {
@@ -115,12 +129,10 @@ class Show extends Component
             }
         }
         $this->article->attributes()->sync($attributeData);
+        $this->article->load(['attributes']);
         
-        // Relationships neu laden
-        $this->article->load(['allergens', 'additives', 'attributes']);
-        
-        $this->manageModalShow = false;
-        session()->flash('message', 'Beziehungen erfolgreich gespeichert.');
+        $this->attributeModalShow = false;
+        session()->flash('message', 'Attribute erfolgreich gespeichert.');
     }
 
     public function saveSettings(): void
