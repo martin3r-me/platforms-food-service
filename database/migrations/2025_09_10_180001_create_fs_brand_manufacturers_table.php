@@ -9,13 +9,13 @@ return new class extends Migration {
     {
         Schema::create('fs_brand_manufacturers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('brand_id')->constrained('fs_brands')->onDelete('cascade');
-            $table->foreignId('manufacturer_id')->constrained('fs_manufacturers')->onDelete('cascade');
+            $table->foreignId('fs_brand_id')->constrained('fs_brands')->onDelete('cascade');
+            $table->foreignId('fs_manufacturer_id')->constrained('fs_manufacturers')->onDelete('cascade');
             $table->boolean('is_primary')->default(false);
             $table->timestamps();
 
             // Ensure unique combination of brand and manufacturer
-            $table->unique(['brand_id', 'manufacturer_id']);
+            $table->unique(['fs_brand_id', 'fs_manufacturer_id']);
         });
     }
 

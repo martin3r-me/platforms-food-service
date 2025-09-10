@@ -56,14 +56,14 @@ class FsBrand extends Model
 
     public function manufacturers()
     {
-        return $this->belongsToMany(FsManufacturer::class, 'fs_brand_manufacturers')
+        return $this->belongsToMany(FsManufacturer::class, 'fs_brand_manufacturers', 'fs_brand_id', 'fs_manufacturer_id')
                     ->withPivot('is_primary')
                     ->withTimestamps();
     }
 
     public function primaryManufacturer()
     {
-        return $this->belongsToMany(FsManufacturer::class, 'fs_brand_manufacturers')
+        return $this->belongsToMany(FsManufacturer::class, 'fs_brand_manufacturers', 'fs_brand_id', 'fs_manufacturer_id')
                     ->wherePivot('is_primary', true);
     }
 }
