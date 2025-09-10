@@ -111,6 +111,17 @@ class Show extends Component
     {
         $this->modalType = $type;
         $this->modalShow = true;
+        
+        // Load available options based on type
+        if ($type === 'allergen') {
+            $this->selectedAllergens = $this->article->allergens->pluck('id')->toArray();
+        } elseif ($type === 'additive') {
+            $this->selectedAdditives = $this->article->additives->pluck('id')->toArray();
+        } elseif ($type === 'attribute') {
+            $this->selectedAttributes = $this->article->attributes->pluck('id')->toArray();
+        } elseif ($type === 'supplier') {
+            $this->resetSupplierArticleForm();
+        }
     }
 
     public function closeModal()
@@ -309,7 +320,7 @@ class Show extends Component
         ]);
 
         $this->resetSupplierArticleForm();
-        $this->dispatch('close-supplier-modal');
+        $this->closeModal();
         session()->flash('message', 'Lieferanten-Artikel erfolgreich erstellt!');
     }
 

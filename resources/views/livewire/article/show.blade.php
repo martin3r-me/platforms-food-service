@@ -253,7 +253,7 @@
                 <h3 class="text-lg font-semibold mb-4 text-secondary">Lieferanten</h3>
                 <div class="d-flex items-center justify-between mb-4">
                     <p class="text-sm text-gray-600">Verwalte die Lieferanten für diesen Artikel</p>
-                    <x-ui-button variant="primary" size="sm" wire:click="$dispatch('openSupplierModal')">
+                    <x-ui-button variant="primary" size="sm" wire:click="openModal('supplier')">
                         @svg('heroicon-o-plus', 'w-4 h-4 mr-1')
                         Neuer Lieferant
                     </x-ui-button>
@@ -469,6 +469,9 @@
                 @elseif($modalType === 'attribute')
                     @svg('heroicon-o-tag', 'w-6 h-6 text-primary')
                     Attribute verwalten
+                @elseif($modalType === 'supplier')
+                    @svg('heroicon-o-truck', 'w-6 h-6 text-success')
+                    Neuer Lieferant
                 @endif
             </div>
         </x-slot>
@@ -518,43 +521,10 @@
                     </div>
                 @endforeach
             </div>
-        @endif
-
-        <x-slot name="footer">
-            <div class="d-flex justify-end gap-3">
-                <x-ui-button
-                    type="button"
-                    variant="secondary-outline"
-                    wire:click="closeModal"
-                >
-                    Abbrechen
-                </x-ui-button>
-                <x-ui-button
-                    type="submit"
-                    variant="primary"
-                    wire:click="saveRelationships"
-                >
-                    Speichern
-                </x-ui-button>
-            </div>
-        </x-slot>
-    </x-ui-modal>
-
-    <!-- Supplier Modal -->
-    <div x-data="{ supplierModalOpen: false }" 
-         @open-supplier-modal.window="supplierModalOpen = true"
-         @close-supplier-modal.window="supplierModalOpen = false">
-        <x-ui-modal wire:model="supplierModalOpen">
-            <x-slot name="header">
-                <div class="d-flex items-center gap-2">
-                    @svg('heroicon-o-truck', 'w-5 h-5')
-                    Neuer Lieferanten-Artikel
-                </div>
-            </x-slot>
-
+        @elseif($modalType === 'supplier')
             <div class="space-y-4">
                 <x-ui-input-select
-                    name="supplier_id"
+                    name="newSupplierArticle.supplier_id"
                     label="Lieferant"
                     :options="$this->availableSuppliers"
                     optionValue="id"
@@ -565,12 +535,12 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <x-ui-input-text
-                        name="supplier_article_number"
+                        name="newSupplierArticle.supplier_article_number"
                         label="Lieferanten-Artikel-Nr"
                         wire:model.live="newSupplierArticle.supplier_article_number"
                     />
                     <x-ui-input-text
-                        name="supplier_ean"
+                        name="newSupplierArticle.supplier_ean"
                         label="Lieferanten-EAN"
                         wire:model.live="newSupplierArticle.supplier_ean"
                     />
@@ -578,14 +548,14 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <x-ui-input-text
-                        name="purchase_price"
+                        name="newSupplierArticle.purchase_price"
                         label="Einkaufspreis"
                         type="number"
                         step="0.01"
                         wire:model.live="newSupplierArticle.purchase_price"
                     />
                     <x-ui-input-select
-                        name="currency"
+                        name="newSupplierArticle.currency"
                         label="Währung"
                         :options="$this->currencies"
                         optionValue="key"
@@ -597,13 +567,13 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <x-ui-input-text
-                        name="minimum_order_quantity"
+                        name="newSupplierArticle.minimum_order_quantity"
                         label="Mindestbestellmenge"
                         type="number"
                         wire:model.live="newSupplierArticle.minimum_order_quantity"
                     />
                     <x-ui-input-text
-                        name="delivery_time_days"
+                        name="newSupplierArticle.delivery_time_days"
                         label="Lieferzeit (Tage)"
                         type="number"
                         wire:model.live="newSupplierArticle.delivery_time_days"
@@ -611,7 +581,7 @@
                 </div>
 
                 <x-ui-input-textarea
-                    name="notes"
+                    name="newSupplierArticle.notes"
                     label="Notizen"
                     wire:model.live="newSupplierArticle.notes"
                     rows="3"
@@ -625,17 +595,36 @@
                     block="true"
                 />
             </div>
+        @endif
 
-            <x-slot name="footer">
-                <div class="d-flex gap-2 justify-end">
-                    <x-ui-button variant="secondary" @click="supplierModalOpen = false">
-                        Abbrechen
-                    </x-ui-button>
-                    <x-ui-button variant="primary" wire:click="saveSupplierArticle">
+        <x-slot name="footer">
+            <div class="d-flex justify-end gap-3">
+                <x-ui-button
+                    type="button"
+                    variant="secondary-outline"
+                    wire:click="closeModal"
+                >
+                    Abbrechen
+                </x-ui-button>
+                @if($modalType === 'supplier')
+                    <x-ui-button
+                        type="submit"
+                        variant="primary"
+                        wire:click="saveSupplierArticle"
+                    >
                         Erstellen
                     </x-ui-button>
-                </div>
-            </x-slot>
-        </x-ui-modal>
-    </div>
+                @else
+                    <x-ui-button
+                        type="submit"
+                        variant="primary"
+                        wire:click="saveRelationships"
+                    >
+                        Speichern
+                    </x-ui-button>
+                @endif
+            </div>
+        </x-slot>
+    </x-ui-modal>
+
 </div>
