@@ -54,7 +54,7 @@ class FsSupplierArticle extends Model
      */
     public function supplier(): BelongsTo
     {
-        return $this->belongsTo(FsSupplier::class);
+        return $this->belongsTo(FsSupplier::class, 'supplier_id');
     }
 
     /**
@@ -62,6 +62,6 @@ class FsSupplierArticle extends Model
      */
     public function article(): BelongsTo
     {
-        return $this->belongsTo(FsArticle::class);
+        return $this->belongsTo(FsArticle::class, 'article_id');
     }
 }
