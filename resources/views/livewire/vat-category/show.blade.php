@@ -118,7 +118,7 @@
                     @if($editingRateId)
                         <x-ui-confirm-button 
                             action="deleteRate"
-                            :args="[$editingRateId]"
+                            wire:args="[{{ $editingRateId }}]"
                             text="Delete" 
                             confirmText="Wirklich löschen?" 
                             variant="danger-outline"

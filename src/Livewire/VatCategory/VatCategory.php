@@ -128,11 +128,17 @@ class VatCategory extends Component
         $this->closeRateModal();
     }
 
-    public function deleteRate(int $rateId): void
+    public function deleteRate($rateId): void
     {
-        $rate = $this->category->rates()->findOrFail($rateId);
+        $rate = $this->category->rates()->findOrFail((int)$rateId);
         $rate->delete();
         $this->closeRateModal();
+    }
+
+    public function deleteCategory(): void
+    {
+        $this->category->delete();
+        $this->redirectRoute('foodservice.vat-categories.index');
     }
 
     public function render()
