@@ -8,6 +8,7 @@
         <x-ui-table compact="true">
             <x-ui-table-header>
                 <x-ui-table-header-cell compact="true">Name</x-ui-table-header-cell>
+                <x-ui-table-header-cell compact="true">Manufacturers</x-ui-table-header-cell>
                 <x-ui-table-header-cell compact="true">Status</x-ui-table-header-cell>
                 <x-ui-table-header-cell compact="true" align="right">Action</x-ui-table-header-cell>
             </x-ui-table-header>
@@ -16,6 +17,25 @@
                 @foreach($items as $item)
                     <x-ui-table-row compact="true" clickable="true" :href="route('foodservice.brands.show', ['brand' => $item])" wire:navigate>
                         <x-ui-table-cell compact="true">{{ $item->name }}</x-ui-table-cell>
+                        <x-ui-table-cell compact="true">
+                            @if($item->manufacturers->count() > 0)
+                                <div class="d-flex flex-wrap gap-1">
+                                    @foreach($item->manufacturers as $manufacturer)
+                                        <x-ui-badge 
+                                            variant="{{ $manufacturer->pivot->is_primary ? 'primary' : 'secondary' }}" 
+                                            size="xs"
+                                        >
+                                            {{ $manufacturer->name }}
+                                            @if($manufacturer->pivot->is_primary)
+                                                <span class="ml-1">★</span>
+                                            @endif
+                                        </x-ui-badge>
+                                    @endforeach
+                                </div>
+                            @else
+                                <span class="text-muted text-sm">–</span>
+                            @endif
+                        </x-ui-table-cell>
                         <x-ui-table-cell compact="true">
                             <x-ui-badge variant="{{ $item->is_active ? 'success' : 'secondary' }}" size="sm">
                                 {{ $item->is_active ? 'Active' : 'Inactive' }}
@@ -40,6 +60,34 @@
         <form wire:submit.prevent="createItem" class="space-y-4">
             <x-ui-input-text name="name" label="Name" wire:model.live="name" required />
             <x-ui-input-textarea name="description" label="Description" wire:model.live="description" rows="3" />
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Manufacturers</label>
+                <div class="space-y-2 max-h-40 overflow-y-auto border border-gray-200 rounded-md p-2">
+                    @forelse($manufacturers as $manufacturer)
+                        <div class="d-flex items-center gap-2">
+                            <x-ui-input-checkbox 
+                                wire:model.live="selectedManufacturers" 
+                                value="{{ $manufacturer->id }}"
+                                size="sm"
+                            />
+                            <span class="text-sm">{{ $manufacturer->name }}</span>
+                            @if(in_array($manufacturer->id, $selectedManufacturers))
+                                <x-ui-input-checkbox 
+                                    wire:model.live="primaryManufacturer" 
+                                    value="{{ $manufacturer->id }}"
+                                    size="sm"
+                                    class="ml-auto"
+                                />
+                                <span class="text-xs text-muted">Primary</span>
+                            @endif
+                        </div>
+                    @empty
+                        <div class="text-sm text-muted">No manufacturers available</div>
+                    @endforelse
+                </div>
+            </div>
+            
             <x-ui-input-checkbox model="is_active" checked-label="Active" unchecked-label="Inactive" />
         </form>
 
