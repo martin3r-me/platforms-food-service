@@ -6,6 +6,15 @@
                     <a href="{{ route('foodservice.article-categories.index') }}" class="d-flex px-3 border-right-solid border-right-1 border-right-muted underline" wire:navigate>
                         Article Categories
                     </a>
+                    
+                    {{-- Breadcrumb Navigation --}}
+                    @if($this->breadcrumbs->count() > 0)
+                        @foreach($this->breadcrumbs as $parent)
+                            <a href="{{ route('foodservice.article-categories.show', ['category' => $parent]) }}" class="d-flex px-3 border-right-solid border-right-1 border-right-muted underline" wire:navigate>
+                                {{ $parent->name }}
+                            </a>
+                        @endforeach
+                    @endif
                 </div>
                 <div class="flex-grow-1 text-right d-flex items-center justify-end gap-2">
                     <span>{{ $category->name }}</span>
@@ -66,6 +75,14 @@
             Settings
         </div>
         <div class="flex-grow-1 overflow-y-auto p-4">
+            {{-- Full Path Display --}}
+            @if($this->fullPath)
+                <div class="mb-4 p-3 bg-muted rounded">
+                    <div class="text-sm text-muted mb-1">Full Path:</div>
+                    <div class="font-medium text-sm">{{ $this->fullPath }}</div>
+                </div>
+            @endif
+
             <x-ui-input-select
                 name="category.parent_id"
                 label="Parent (optional)"

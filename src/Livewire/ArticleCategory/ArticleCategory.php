@@ -62,6 +62,40 @@ class ArticleCategory extends Component
             ->get();
     }
 
+    public function getBreadcrumbsProperty()
+    {
+        $breadcrumbs = collect();
+        $current = $this->category;
+        
+        // Alle Parents sammeln (von aktuell zu root)
+        $parents = collect();
+        while ($current->parent) {
+            $parents->prepend($current->parent);
+            $current = $current->parent;
+        }
+        
+        return $parents;
+    }
+
+    public function getFullPathProperty()
+    {
+        $path = collect();
+        $current = $this->category;
+        
+        // Alle Parents sammeln (von aktuell zu root)
+        $parents = collect();
+        while ($current->parent) {
+            $parents->prepend($current->parent);
+            $current = $current->parent;
+        }
+        
+        // Vollständigen Pfad zusammenbauen
+        $path = $parents->pluck('name');
+        $path->push($this->category->name);
+        
+        return $path->join(' > ');
+    }
+
     public function render()
     {
         $clusters = FsArticleCluster::orderBy('name')->get();
