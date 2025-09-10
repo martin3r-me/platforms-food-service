@@ -120,7 +120,7 @@ class Index extends Component
     }
 
 
-    public function createArticle()
+    public function createItem()
     {
         $this->validate();
         
