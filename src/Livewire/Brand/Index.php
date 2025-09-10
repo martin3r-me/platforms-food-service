@@ -69,17 +69,11 @@ class Index extends Component
     public function render()
     {
         $items = FsBrand::query()
-            ->with('manufacturers')
-            ->orderBy('name')
-            ->get();
-
-        $manufacturers = FsManufacturer::where('is_active', true)
             ->orderBy('name')
             ->get();
 
         return view('foodservice::livewire.brand.index', [
             'items' => $items,
-            'manufacturers' => $manufacturers,
         ])->layout('platform::layouts.app');
     }
 }
