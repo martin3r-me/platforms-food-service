@@ -8,7 +8,6 @@
         <x-ui-table compact="true">
             <x-ui-table-header>
                 <x-ui-table-header-cell compact="true">Name</x-ui-table-header-cell>
-                <x-ui-table-header-cell compact="true">Manufacturers</x-ui-table-header-cell>
                 <x-ui-table-header-cell compact="true">Status</x-ui-table-header-cell>
                 <x-ui-table-header-cell compact="true" align="right">Action</x-ui-table-header-cell>
             </x-ui-table-header>
@@ -17,25 +16,6 @@
                 @foreach($items as $item)
                     <x-ui-table-row compact="true" clickable="true" :href="route('foodservice.brands.show', ['brand' => $item])" wire:navigate>
                         <x-ui-table-cell compact="true">{{ $item->name }}</x-ui-table-cell>
-                        <x-ui-table-cell compact="true">
-                            @if($item->manufacturers->count() > 0)
-                                <div class="d-flex flex-wrap gap-1">
-                                    @foreach($item->manufacturers as $manufacturer)
-                                        <x-ui-badge 
-                                            variant="{{ $manufacturer->pivot->is_primary ? 'primary' : 'secondary' }}" 
-                                            size="xs"
-                                        >
-                                            {{ $manufacturer->name }}
-                                            @if($manufacturer->pivot->is_primary)
-                                                <span class="ml-1">★</span>
-                                            @endif
-                                        </x-ui-badge>
-                                    @endforeach
-                                </div>
-                            @else
-                                <span class="text-muted text-sm">–</span>
-                            @endif
-                        </x-ui-table-cell>
                         <x-ui-table-cell compact="true">
                             <x-ui-badge variant="{{ $item->is_active ? 'success' : 'secondary' }}" size="sm">
                                 {{ $item->is_active ? 'Active' : 'Inactive' }}
