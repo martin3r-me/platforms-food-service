@@ -54,5 +54,18 @@
             <x-heroicon-o-adjustments-horizontal class="w-6 h-6 flex-shrink-0"/>
             <span x-show="!collapsed" class="truncate">Attributes</span>
         </a>
+
+        <a href="{{ route('foodservice.vat-categories.index') }}"
+           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
+           :class="[
+               window.location.pathname.includes('/vat-categories')
+                   ? 'bg-primary text-on-primary shadow-md'
+                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
+               collapsed ? 'justify-center' : 'gap-3'
+           ]"
+           wire:navigate>
+            <x-heroicon-o-banknotes class="w-6 h-6 flex-shrink-0"/>
+            <span x-show="!collapsed" class="truncate">VAT Categories</span>
+        </a>
     </div>
 </div>

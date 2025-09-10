@@ -8,6 +8,8 @@ use Platform\FoodService\Livewire\Additive\Index as AdditiveIndex;
 use Platform\FoodService\Livewire\Additive\Additive as AdditiveShow;
 use Platform\FoodService\Livewire\Attribute\Index as AttributeIndex;
 use Platform\FoodService\Livewire\Attribute\Attribute as AttributeShow;
+use Platform\FoodService\Livewire\VatCategory\Index as VatCategoryIndex;
+use Platform\FoodService\Livewire\VatCategory\VatCategory as VatCategoryShow;
 
 Route::get('/', FoodServiceDashboard::class)->name('foodservice.dashboard');
 
@@ -22,6 +24,10 @@ Route::get('/additives/{additive}', AdditiveShow::class)->name('foodservice.addi
 // Attributes
 Route::get('/attributes', AttributeIndex::class)->name('foodservice.attributes.index');
 Route::get('/attributes/{attribute}', AttributeShow::class)->name('foodservice.attributes.show');
+
+// VAT Categories
+Route::get('/vat-categories', VatCategoryIndex::class)->name('foodservice.vat-categories.index');
+Route::get('/vat-categories/{category}', VatCategoryShow::class)->name('foodservice.vat-categories.show');
 
 
 
