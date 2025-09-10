@@ -102,6 +102,31 @@
         </a>
     </div>
 
+    <!-- Dritte Reihe (2er Grid für Brands und Manufacturers) -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+        <a href="{{ route('foodservice.brands.index') }}" wire:navigate>
+            <x-ui-dashboard-tile
+                title="Brands"
+                :count="$counts['brands']['total'] ?? 0"
+                subtitle="Active: {{ $counts['brands']['active'] ?? 0 }} · Inactive: {{ $counts['brands']['inactive'] ?? 0 }}"
+                icon="star"
+                variant="warning"
+                size="lg"
+            />
+        </a>
+
+        <a href="{{ route('foodservice.manufacturers.index') }}" wire:navigate>
+            <x-ui-dashboard-tile
+                title="Manufacturers"
+                :count="$counts['manufacturers']['total'] ?? 0"
+                subtitle="Active: {{ $counts['manufacturers']['active'] ?? 0 }} · Inactive: {{ $counts['manufacturers']['inactive'] ?? 0 }}"
+                icon="building-office"
+                variant="info"
+                size="lg"
+            />
+        </a>
+    </div>
+
     <!-- Recent Listen (4er Grid) -->
     <div class="grid grid-cols-4 gap-4 mb-8">
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
@@ -227,6 +252,41 @@
             <div class="p-4 space-y-2 text-sm">
                 @forelse(($recent['base_units'] ?? []) as $item)
                     <a href="{{ route('foodservice.base-units.show', ['baseUnit' => $item]) }}" class="block hover:underline" wire:navigate>
+                        {{ $item->name }}
+                    </a>
+                @empty
+                    <div class="text-muted">– No entries –</div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    <!-- Dritte Reihe Recent (2er Grid für Brands und Manufacturers) -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="p-4 border-b border-gray-200 d-flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Recent Brands</h3>
+                <a href="{{ route('foodservice.brands.index') }}" class="text-xs text-primary underline" wire:navigate>Alle</a>
+            </div>
+            <div class="p-4 space-y-2 text-sm">
+                @forelse(($recent['brands'] ?? []) as $item)
+                    <a href="{{ route('foodservice.brands.show', ['brand' => $item]) }}" class="block hover:underline" wire:navigate>
+                        {{ $item->name }}
+                    </a>
+                @empty
+                    <div class="text-muted">– No entries –</div>
+                @endforelse
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="p-4 border-b border-gray-200 d-flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Recent Manufacturers</h3>
+                <a href="{{ route('foodservice.manufacturers.index') }}" class="text-xs text-primary underline" wire:navigate>Alle</a>
+            </div>
+            <div class="p-4 space-y-2 text-sm">
+                @forelse(($recent['manufacturers'] ?? []) as $item)
+                    <a href="{{ route('foodservice.manufacturers.show', ['manufacturer' => $item]) }}" class="block hover:underline" wire:navigate>
                         {{ $item->name }}
                     </a>
                 @empty

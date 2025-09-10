@@ -11,6 +11,8 @@ use Platform\FoodService\Models\FsArticleCluster;
 use Platform\FoodService\Models\FsArticleCategory;
 use Platform\FoodService\Models\FsStorageType;
 use Platform\FoodService\Models\FsBaseUnit;
+use Platform\FoodService\Models\FsBrand;
+use Platform\FoodService\Models\FsManufacturer;
 
 class Dashboard extends Component
 {
@@ -57,6 +59,16 @@ class Dashboard extends Component
                 'active' => FsBaseUnit::where('is_active', true)->count(),
                 'inactive' => FsBaseUnit::where('is_active', false)->count(),
             ],
+            'brands' => [
+                'total' => FsBrand::count(),
+                'active' => FsBrand::where('is_active', true)->count(),
+                'inactive' => FsBrand::where('is_active', false)->count(),
+            ],
+            'manufacturers' => [
+                'total' => FsManufacturer::count(),
+                'active' => FsManufacturer::where('is_active', true)->count(),
+                'inactive' => FsManufacturer::where('is_active', false)->count(),
+            ],
         ];
 
         $recent = [
@@ -68,6 +80,8 @@ class Dashboard extends Component
             'article_categories' => FsArticleCategory::orderBy('created_at', 'desc')->take(5)->get(),
             'storage_types' => FsStorageType::orderBy('created_at', 'desc')->take(5)->get(),
             'base_units' => FsBaseUnit::orderBy('created_at', 'desc')->take(5)->get(),
+            'brands' => FsBrand::orderBy('created_at', 'desc')->take(5)->get(),
+            'manufacturers' => FsManufacturer::orderBy('created_at', 'desc')->take(5)->get(),
         ];
 
         return view('foodservice::livewire.dashboard', [

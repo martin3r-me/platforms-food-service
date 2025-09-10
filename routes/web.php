@@ -18,6 +18,10 @@ use Platform\FoodService\Livewire\StorageType\Index as StorageTypeIndex;
 use Platform\FoodService\Livewire\StorageType\StorageType as StorageTypeShow;
 use Platform\FoodService\Livewire\BaseUnit\Index as BaseUnitIndex;
 use Platform\FoodService\Livewire\BaseUnit\BaseUnit as BaseUnitShow;
+use Platform\FoodService\Livewire\Brand\Index as BrandIndex;
+use Platform\FoodService\Livewire\Brand\Brand as BrandShow;
+use Platform\FoodService\Livewire\Manufacturer\Index as ManufacturerIndex;
+use Platform\FoodService\Livewire\Manufacturer\Manufacturer as ManufacturerShow;
 
 Route::get('/', FoodServiceDashboard::class)->name('foodservice.dashboard');
 
@@ -52,6 +56,14 @@ Route::get('/storage-types/{storageType}', StorageTypeShow::class)->name('foodse
 // Base Units
 Route::get('/base-units', BaseUnitIndex::class)->name('foodservice.base-units.index');
 Route::get('/base-units/{baseUnit}', BaseUnitShow::class)->name('foodservice.base-units.show');
+
+// Brands
+Route::get('/brands', BrandIndex::class)->name('foodservice.brands.index');
+Route::get('/brands/{brand}', BrandShow::class)->name('foodservice.brands.show');
+
+// Manufacturers
+Route::get('/manufacturers', ManufacturerIndex::class)->name('foodservice.manufacturers.index');
+Route::get('/manufacturers/{manufacturer}', ManufacturerShow::class)->name('foodservice.manufacturers.show');
 
 
 

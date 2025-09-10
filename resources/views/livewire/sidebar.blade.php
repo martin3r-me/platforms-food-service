@@ -119,5 +119,31 @@
             <x-heroicon-o-scale class="w-6 h-6 flex-shrink-0"/>
             <span x-show="!collapsed" class="truncate">Base Units</span>
         </a>
+
+        <a href="{{ route('foodservice.brands.index') }}"
+           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
+           :class="[
+               window.location.pathname.includes('/brands')
+                   ? 'bg-primary text-on-primary shadow-md'
+                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
+               collapsed ? 'justify-center' : 'gap-3'
+           ]"
+           wire:navigate>
+            <x-heroicon-o-star class="w-6 h-6 flex-shrink-0"/>
+            <span x-show="!collapsed" class="truncate">Brands</span>
+        </a>
+
+        <a href="{{ route('foodservice.manufacturers.index') }}"
+           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
+           :class="[
+               window.location.pathname.includes('/manufacturers')
+                   ? 'bg-primary text-on-primary shadow-md'
+                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
+               collapsed ? 'justify-center' : 'gap-3'
+           ]"
+           wire:navigate>
+            <x-heroicon-o-building-office class="w-6 h-6 flex-shrink-0"/>
+            <span x-show="!collapsed" class="truncate">Manufacturers</span>
+        </a>
     </div>
 </div>
