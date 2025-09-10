@@ -42,7 +42,7 @@ class Attribute extends Component
     public function deleteItem(): void
     {
         $this->attribute->delete();
-        return redirect()->route('food-service.attributes.index');
+        $this->redirectRoute('food-service.attributes.index');
     }
 
     public function render()

@@ -42,7 +42,7 @@ class Allergen extends Component
     public function deleteItem(): void
     {
         $this->allergen->delete();
-        return redirect()->route('food-service.allergens.index');
+        $this->redirectRoute('food-service.allergens.index');
     }
 
     public function render()

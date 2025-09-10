@@ -42,7 +42,7 @@ class Additive extends Component
     public function deleteItem(): void
     {
         $this->additive->delete();
-        return redirect()->route('food-service.additives.index');
+        $this->redirectRoute('food-service.additives.index');
     }
 
     public function render()
