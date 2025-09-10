@@ -5,13 +5,13 @@ namespace Platform\FoodService\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Platform\ActivityLog\Traits\LogsActivity;
-use Platform\Crm\Traits\HasContactLinksTrait;
+use Platform\Crm\Contracts\CompanyLinkableInterface;
 use Platform\Crm\Traits\HasCompanyLinksTrait;
 use Symfony\Component\Uid\UuidV7;
 
-class FsSupplier extends Model
+class FsSupplier extends Model implements CompanyLinkableInterface
 {
-    use SoftDeletes, LogsActivity, HasContactLinksTrait, HasCompanyLinksTrait;
+    use SoftDeletes, LogsActivity, HasCompanyLinksTrait;
     
     protected $table = 'fs_suppliers';
 
@@ -60,5 +60,23 @@ class FsSupplier extends Model
     public function supplierArticles()
     {
         return $this->hasMany(FsSupplierArticle::class, 'supplier_id');
+    }
+
+    // CompanyLinkableInterface Implementation
+    public function getCompanyLinkableId(): int
+    {
+        return $this->id;
+    }
+
+    public function getCompanyLinkableType(): string
+    {
+        return 'Platform\\FoodService\\Models\\FsSupplier';
+    }
+
+    public function getCompanyIdentifiers(): array
+    {
+        // Für Suppliers haben wir keine direkten Company-Identifikatoren
+        // Diese könnten aus den verknüpften Companies kommen
+        return [];
     }
 }

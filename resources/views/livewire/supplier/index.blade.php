@@ -60,7 +60,6 @@
                                 </button>
                             </th>
                             <th class="px-6 py-3">Unternehmen</th>
-                            <th class="px-6 py-3">Kontakt</th>
                             <th class="px-6 py-3">Status</th>
                             <th class="px-6 py-3">Erstellt</th>
                             <th class="px-6 py-3 text-right">Aktionen</th>
@@ -81,16 +80,6 @@
                                         <div>
                                             <div class="font-medium text-gray-900">
                                                 {{ optional($supplier->companyLinks->first()?->company)->name ?? 'Kein Unternehmen verknüpft' }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="d-flex items-center">
-                                        @svg('heroicon-o-user', 'w-5 h-5 text-gray-400 mr-3')
-                                        <div>
-                                            <div class="font-medium text-gray-900">
-                                                {{ optional($supplier->contactLinks->first()?->contact)->name ?? 'Kein Kontakt verknüpft' }}
                                             </div>
                                         </div>
                                     </div>
@@ -121,7 +110,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                                <td colspan="5" class="px-6 py-12 text-center text-gray-500">
                                     <div class="d-flex flex-col items-center">
                                         @svg('heroicon-o-truck', 'w-12 h-12 text-gray-300 mb-4')
                                         <p class="text-lg font-medium mb-2">Keine Lieferanten vorhanden</p>
@@ -169,32 +158,17 @@
                 placeholder="Optionale Beschreibung des Lieferanten"
             />
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Unternehmen (optional)</label>
-                    <x-ui-input-select
-                        name="crm_company_id"
-                        :options="$this->availableCompanies"
-                        optionValue="id"
-                        optionLabel="name"
-                        :nullable="true"
-                        nullLabel="– Kein Unternehmen –"
-                        wire:model.live="crm_company_id"
-                    />
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Kontakt (optional)</label>
-                    <x-ui-input-select
-                        name="crm_contact_id"
-                        :options="$this->availableContacts"
-                        optionValue="id"
-                        optionLabel="name"
-                        :nullable="true"
-                        nullLabel="– Kein Kontakt –"
-                        wire:model.live="crm_contact_id"
-                    />
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Unternehmen (optional)</label>
+                <x-ui-input-select
+                    name="crm_company_id"
+                    :options="$this->availableCompanies"
+                    optionValue="id"
+                    optionLabel="name"
+                    :nullable="true"
+                    nullLabel="– Kein Unternehmen –"
+                    wire:model.live="crm_company_id"
+                />
             </div>
         </form>
 

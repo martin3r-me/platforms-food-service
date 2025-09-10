@@ -21,7 +21,7 @@ class Show extends Component
 
     public function mount(FsSupplier $supplier)
     {
-        $this->supplier = $supplier->load(['contactLinks.contact', 'companyLinks.company']);
+        $this->supplier = $supplier->load(['companyLinks.company']);
         
         // Settings Form initialisieren
         $this->settingsForm = [

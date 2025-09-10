@@ -5,8 +5,8 @@ namespace Platform\FoodService\Livewire\Supplier;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use Platform\FoodService\Models\FsSupplier;
-use Platform\Crm\Models\CrmContact;
 use Platform\Crm\Models\CrmCompany;
+use Platform\Crm\Contracts\CompanyLinkableInterface;
 
 class Index extends Component
 {
@@ -20,14 +20,12 @@ class Index extends Component
     // Form Data
     public $supplier_number = '';
     public $crm_company_id = '';
-    public $crm_contact_id = '';
     public $description = '';
     public $is_active = true;
 
     protected $rules = [
         'supplier_number' => 'required|string|max:255|unique:fs_suppliers,supplier_number',
         'crm_company_id' => 'nullable|exists:crm_companies,id',
-        'crm_contact_id' => 'nullable|exists:crm_contacts,id',
         'description' => 'nullable|string',
         'is_active' => 'boolean',
     ];
@@ -35,7 +33,7 @@ class Index extends Component
     #[Computed]
     public function suppliers()
     {
-        $query = FsSupplier::with(['contactLinks.contact', 'companyLinks.company'])
+        $query = FsSupplier::with(['companyLinks.company'])
             ->forTeam(auth()->user()->currentTeam->id);
 
         if ($this->sortField === 'supplier_number') {
@@ -62,20 +60,6 @@ class Index extends Component
             ->get();
     }
 
-    #[Computed]
-    public function availableContacts()
-    {
-        // Aktive CRM Contacts aus dem Team, die noch nicht mit einem Supplier verknüpft sind
-        $linkedIds = \Platform\Crm\Models\CrmContactLink::where('linkable_type', 'Platform\\FoodService\\Models\\FsSupplier')
-            ->where('team_id', auth()->user()->currentTeam->id)
-            ->pluck('contact_id');
-
-        return CrmContact::where('team_id', auth()->user()->currentTeam->id)
-            ->where('is_active', true)
-            ->whereNotIn('id', $linkedIds)
-            ->orderBy('name')
-            ->get();
-    }
 
     #[Computed]
     public function stats()
@@ -116,14 +100,6 @@ class Index extends Component
             }
         }
 
-        // Verknüpfe mit CRM Contact
-        if ($this->crm_contact_id) {
-            $contact = CrmContact::find($this->crm_contact_id);
-            if ($contact) {
-                $supplier->attachContact($contact);
-            }
-        }
-
         $this->resetForm();
         $this->modalShow = false;
         
@@ -135,7 +111,6 @@ class Index extends Component
         $this->reset([
             'supplier_number', 
             'crm_company_id',
-            'crm_contact_id', 
             'description', 
             'is_active'
         ]);
