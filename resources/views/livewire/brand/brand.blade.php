@@ -71,7 +71,6 @@
                     <div class="text-muted">No manufacturers assigned</div>
                 @endif
             </div>
-            
         </div>
 
         <!-- Aktivitäten -->

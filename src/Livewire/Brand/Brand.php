@@ -4,13 +4,11 @@ namespace Platform\FoodService\Livewire\Brand;
 
 use Livewire\Component;
 use Platform\FoodService\Models\FsBrand;
-use Platform\FoodService\Models\FsManufacturer;
 
 class Brand extends Component
 {
     public FsBrand $brand;
     public bool $isDirty = false;
-    public bool $settingsOpen = true;
 
     public function mount(FsBrand $brand): void
     {
@@ -48,13 +46,6 @@ class Brand extends Component
 
     public function render()
     {
-        $manufacturers = FsManufacturer::where('is_active', true)
-            ->orderBy('name')
-            ->get();
-
-        return view('foodservice::livewire.brand.brand', [
-            'brand' => $this->brand,
-            'manufacturers' => $manufacturers,
-        ])->layout('platform::layouts.app');
+        return view('foodservice::livewire.brand.brand')->layout('platform::layouts.app');
     }
 }
