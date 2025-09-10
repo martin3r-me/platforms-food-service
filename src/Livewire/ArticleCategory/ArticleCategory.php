@@ -197,7 +197,7 @@ class ArticleCategory extends Component
             }
         }
 
-        $newCategory = FsArticleCategory::create([
+        FsArticleCategory::create([
             'name' => $this->name,
             'description' => $this->description,
             'is_active' => $this->is_active,
@@ -209,9 +209,6 @@ class ArticleCategory extends Component
         ]);
 
         $this->closeCreateModal();
-        
-        // Zur neuen Category weiterleiten
-        $this->redirectRoute('foodservice.article-categories.show', ['category' => $newCategory]);
     }
 
     public function render()
