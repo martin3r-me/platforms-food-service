@@ -14,6 +14,8 @@ use Platform\FoodService\Livewire\ArticleCluster\Index as ArticleClusterIndex;
 use Platform\FoodService\Livewire\ArticleCluster\ArticleCluster as ArticleClusterShow;
 use Platform\FoodService\Livewire\ArticleCategory\Index as ArticleCategoryIndex;
 use Platform\FoodService\Livewire\ArticleCategory\ArticleCategory as ArticleCategoryShow;
+use Platform\FoodService\Livewire\StorageType\Index as StorageTypeIndex;
+use Platform\FoodService\Livewire\StorageType\StorageType as StorageTypeShow;
 
 Route::get('/', FoodServiceDashboard::class)->name('foodservice.dashboard');
 
@@ -40,6 +42,10 @@ Route::get('/article-clusters/{cluster}', ArticleClusterShow::class)->name('food
 // Article Categories
 Route::get('/article-categories', ArticleCategoryIndex::class)->name('foodservice.article-categories.index');
 Route::get('/article-categories/{category}', ArticleCategoryShow::class)->name('foodservice.article-categories.show');
+
+// Storage Types
+Route::get('/storage-types', StorageTypeIndex::class)->name('foodservice.storage-types.index');
+Route::get('/storage-types/{storageType}', StorageTypeShow::class)->name('foodservice.storage-types.show');
 
 
 
