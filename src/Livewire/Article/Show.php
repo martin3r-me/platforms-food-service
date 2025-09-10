@@ -22,8 +22,16 @@ class Show extends Component
     // Settings Modal
     public $settingsModalShow = false;
     
+    // Manage Modal
+    public $manageModalShow = false;
+    
     // Track if form is dirty
     public $isDirty = false;
+    
+    // Relationship management
+    public $selectedAllergens = [];
+    public $selectedAdditives = [];
+    public $attributeValues = [];
     
     // Settings Form
     public $settingsForm = [
@@ -50,6 +58,11 @@ class Show extends Component
             'description' => $this->article->description ?? '',
             'is_active' => $this->article->is_active,
         ];
+        
+        // Relationship data initialisieren
+        $this->selectedAllergens = $this->article->allergens->pluck('id')->toArray();
+        $this->selectedAdditives = $this->article->additives->pluck('id')->toArray();
+        $this->attributeValues = $this->article->attributes->pluck('pivot.value', 'id')->toArray();
     }
 
     public function updated($propertyName)
@@ -84,6 +97,30 @@ class Show extends Component
         session()->flash('message', 'Artikel erfolgreich gelöscht.');
         
         return redirect()->route('foodservice.articles.index');
+    }
+
+    public function saveRelationships()
+    {
+        // Allergene synchronisieren
+        $this->article->allergens()->sync($this->selectedAllergens);
+        
+        // Zusatzstoffe synchronisieren
+        $this->article->additives()->sync($this->selectedAdditives);
+        
+        // Attribute synchronisieren (mit Werten)
+        $attributeData = [];
+        foreach ($this->attributeValues as $attributeId => $value) {
+            if (!empty($value)) {
+                $attributeData[$attributeId] = ['value' => $value];
+            }
+        }
+        $this->article->attributes()->sync($attributeData);
+        
+        // Relationships neu laden
+        $this->article->load(['allergens', 'additives', 'attributes']);
+        
+        $this->manageModalShow = false;
+        session()->flash('message', 'Beziehungen erfolgreich gespeichert.');
     }
 
     public function saveSettings(): void

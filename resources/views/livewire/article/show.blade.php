@@ -167,50 +167,16 @@
                 </div>
             </div>
 
-            <!-- Gewicht und Volumen -->
-            <div class="mb-6">
-                <h3 class="text-lg font-semibold mb-4 text-secondary">Gewicht und Volumen</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <x-ui-input-text 
-                        name="article.net_weight"
-                        label="Nettogewicht (kg)"
-                        wire:model.live="article.net_weight"
-                        type="number"
-                        step="0.0001"
-                        :errorKey="'article.net_weight'"
-                    />
-                    <x-ui-input-text 
-                        name="article.gross_weight"
-                        label="Bruttogewicht (kg)"
-                        wire:model.live="article.gross_weight"
-                        type="number"
-                        step="0.0001"
-                        :errorKey="'article.gross_weight'"
-                    />
-                </div>
-                <div class="mt-4 grid grid-cols-2 gap-4">
-                    <x-ui-input-text 
-                        name="article.net_volume"
-                        label="Netto-Volumen (l)"
-                        wire:model.live="article.net_volume"
-                        type="number"
-                        step="0.0001"
-                        :errorKey="'article.net_volume'"
-                    />
-                    <x-ui-input-text 
-                        name="article.gross_volume"
-                        label="Brutto-Volumen (l)"
-                        wire:model.live="article.gross_volume"
-                        type="number"
-                        step="0.0001"
-                        :errorKey="'article.gross_volume'"
-                    />
-                </div>
-            </div>
 
             <!-- Allergene, Zusatzstoffe und Attribute -->
             <div class="mb-6">
-                <h3 class="text-lg font-semibold mb-4 text-secondary">Allergene, Zusatzstoffe und Attribute</h3>
+                <div class="d-flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-secondary">Allergene, Zusatzstoffe und Attribute</h3>
+                    <x-ui-button variant="primary" size="sm" wire:click="$set('manageModalShow', true)">
+                        @svg('heroicon-o-plus', 'w-4 h-4 mr-2')
+                        Verwalten
+                    </x-ui-button>
+                </div>
                 <div class="space-y-4">
                     <!-- Allergene -->
                     <div>
@@ -386,4 +352,91 @@
             />
         </div>
     </div>
+
+    <!-- Manage Modal -->
+    <x-ui-modal wire:model="manageModalShow" size="lg">
+        <x-slot name="header">
+            <div class="d-flex items-center gap-2">
+                @svg('heroicon-o-cog-6-tooth', 'w-6 h-6 text-primary')
+                Allergene, Zusatzstoffe und Attribute verwalten
+            </div>
+        </x-slot>
+
+        <div class="space-y-6">
+            <!-- Allergene -->
+            <div>
+                <h4 class="font-semibold mb-3">Allergene</h4>
+                <div class="space-y-2">
+                    @foreach($this->availableAllergens as $allergen)
+                        <div class="d-flex items-center gap-2">
+                            <input 
+                                type="checkbox" 
+                                id="allergen_{{ $allergen->id }}"
+                                wire:model.live="selectedAllergens"
+                                value="{{ $allergen->id }}"
+                                class="rounded border-gray-300"
+                            >
+                            <label for="allergen_{{ $allergen->id }}" class="text-sm">{{ $allergen->name }}</label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Zusatzstoffe -->
+            <div>
+                <h4 class="font-semibold mb-3">Zusatzstoffe</h4>
+                <div class="space-y-2">
+                    @foreach($this->availableAdditives as $additive)
+                        <div class="d-flex items-center gap-2">
+                            <input 
+                                type="checkbox" 
+                                id="additive_{{ $additive->id }}"
+                                wire:model.live="selectedAdditives"
+                                value="{{ $additive->id }}"
+                                class="rounded border-gray-300"
+                            >
+                            <label for="additive_{{ $additive->id }}" class="text-sm">{{ $additive->name }}</label>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Attribute -->
+            <div>
+                <h4 class="font-semibold mb-3">Attribute</h4>
+                <div class="space-y-3">
+                    @foreach($this->availableAttributes as $attribute)
+                        <div class="d-flex items-center gap-2">
+                            <label class="text-sm w-32">{{ $attribute->name }}:</label>
+                            <input 
+                                type="text" 
+                                wire:model.live="attributeValues.{{ $attribute->id }}"
+                                class="flex-1 border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary"
+                                placeholder="Wert eingeben"
+                            >
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <x-slot name="footer">
+            <div class="d-flex justify-end gap-3">
+                <x-ui-button
+                    type="button"
+                    variant="secondary-outline"
+                    @click="$wire.manageModalShow = false"
+                >
+                    Abbrechen
+                </x-ui-button>
+                <x-ui-button
+                    type="submit"
+                    variant="primary"
+                    wire:click="saveRelationships"
+                >
+                    Speichern
+                </x-ui-button>
+            </div>
+        </x-slot>
+    </x-ui-modal>
 </div>
