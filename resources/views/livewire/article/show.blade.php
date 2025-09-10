@@ -306,12 +306,12 @@
                                 </x-ui-table-cell>
                                 <x-ui-table-cell>
                                     <div class="d-flex gap-1">
-                                        <x-ui-button variant="secondary" size="sm" wire:click="$dispatch('openSupplierModal', { supplierArticle: {{ $supplierArticle->id }} })">
+                                        <x-ui-button variant="secondary" size="sm" wire:click="editSupplierArticle({{ $supplierArticle->id }})">
                                             @svg('heroicon-o-pencil', 'w-4 h-4')
                                         </x-ui-button>
                                         <x-ui-confirm-button 
                                             action="deleteSupplierArticle" 
-                                            :params="['supplierArticle' => $supplierArticle->id]"
+                                            :params="['supplierArticleId' => $supplierArticle->id]"
                                             text="" 
                                             confirmText="Wirklich löschen?" 
                                             variant="danger-outline"
@@ -471,7 +471,7 @@
                     Attribute verwalten
                 @elseif($modalType === 'supplier')
                     @svg('heroicon-o-truck', 'w-6 h-6 text-success')
-                    Neuer Lieferant
+                    {{ $editingSupplierArticleId ? 'Lieferanten-Artikel bearbeiten' : 'Neuer Lieferant' }}
                 @endif
             </div>
         </x-slot>
@@ -612,7 +612,7 @@
                         variant="primary"
                         wire:click="saveSupplierArticle"
                     >
-                        Erstellen
+                        {{ $editingSupplierArticleId ? 'Aktualisieren' : 'Erstellen' }}
                     </x-ui-button>
                 @else
                     <x-ui-button

@@ -270,6 +270,7 @@ class Show extends Component
         'notes' => '',
         'is_active' => true,
     ];
+    public $editingSupplierArticleId = null;
 
     public function getAvailableSuppliersProperty()
     {
@@ -303,7 +304,7 @@ class Show extends Component
             'newSupplierArticle.is_active' => 'boolean',
         ]);
 
-        \Platform\FoodService\Models\FsSupplierArticle::create([
+        $data = [
             'supplier_id' => $this->newSupplierArticle['supplier_id'],
             'article_id' => $this->article->id,
             'supplier_article_number' => $this->newSupplierArticle['supplier_article_number'] ?: null,
@@ -317,11 +318,40 @@ class Show extends Component
             'team_id' => auth()->user()->currentTeam->id,
             'created_by_user_id' => auth()->id(),
             'owned_by_user_id' => auth()->id(),
-        ]);
+        ];
+
+        if ($this->editingSupplierArticleId) {
+            $supplierArticle = \Platform\FoodService\Models\FsSupplierArticle::find($this->editingSupplierArticleId);
+            $supplierArticle->update($data);
+            $message = 'Lieferanten-Artikel erfolgreich aktualisiert!';
+        } else {
+            \Platform\FoodService\Models\FsSupplierArticle::create($data);
+            $message = 'Lieferanten-Artikel erfolgreich erstellt!';
+        }
 
         $this->resetSupplierArticleForm();
         $this->closeModal();
-        session()->flash('message', 'Lieferanten-Artikel erfolgreich erstellt!');
+        session()->flash('message', $message);
+    }
+
+    public function editSupplierArticle($supplierArticleId)
+    {
+        $supplierArticle = \Platform\FoodService\Models\FsSupplierArticle::find($supplierArticleId);
+        if ($supplierArticle) {
+            $this->newSupplierArticle = [
+                'supplier_id' => $supplierArticle->supplier_id,
+                'supplier_article_number' => $supplierArticle->supplier_article_number,
+                'supplier_ean' => $supplierArticle->supplier_ean,
+                'purchase_price' => $supplierArticle->purchase_price,
+                'currency' => $supplierArticle->currency,
+                'minimum_order_quantity' => $supplierArticle->minimum_order_quantity,
+                'delivery_time_days' => $supplierArticle->delivery_time_days,
+                'notes' => $supplierArticle->notes,
+                'is_active' => $supplierArticle->is_active,
+            ];
+            $this->editingSupplierArticleId = $supplierArticleId;
+            $this->openModal('supplier');
+        }
     }
 
     public function deleteSupplierArticle($supplierArticleId)
@@ -346,6 +376,7 @@ class Show extends Component
             'notes' => '',
             'is_active' => true,
         ];
+        $this->editingSupplierArticleId = null;
     }
 
     public function render()
