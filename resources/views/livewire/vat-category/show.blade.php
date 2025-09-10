@@ -48,12 +48,22 @@
                 </div>
             </div>
 
-            <div class="mb-6">
+            
+        </div>
+    </div>
+
+    <div class="min-w-80 w-80 d-flex flex-col border-left-1 border-left-solid border-left-muted">
+        <div class="d-flex gap-2 border-top-1 border-bottom-1 border-muted border-top-solid border-bottom-solid p-2 flex-shrink-0">
+            <x-heroicon-o-cog-6-tooth class="w-6 h-6"/>
+            Settings
+        </div>
+        <div class="flex-grow-1 overflow-y-auto p-4">
+            <div class="mb-4">
                 <div class="d-flex items-center justify-between mb-2">
-                    <h3 class="text-lg font-semibold text-secondary">Rates</h3>
+                    <h4 class="font-semibold">Rates</h4>
                     <x-ui-button size="sm" variant="secondary" wire:click="openRateModal(null)">
                         @svg('heroicon-o-plus', 'w-4 h-4')
-                        New Rate
+                        New
                     </x-ui-button>
                 </div>
                 <div class="space-y-2">
@@ -78,15 +88,7 @@
                     @endforelse
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="min-w-80 w-80 d-flex flex-col border-left-1 border-left-solid border-left-muted">
-        <div class="d-flex gap-2 border-top-1 border-bottom-1 border-muted border-top-solid border-bottom-solid p-2 flex-shrink-0">
-            <x-heroicon-o-cog-6-tooth class="w-6 h-6"/>
-            Settings
-        </div>
-        <div class="flex-grow-1 overflow-y-auto p-4">
             <x-ui-input-checkbox
                 model="category.is_active"
                 checked-label="Active"
