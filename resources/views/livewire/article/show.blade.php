@@ -306,17 +306,18 @@
                                 </x-ui-table-cell>
                                 <x-ui-table-cell>
                                     <div class="d-flex gap-1">
-                                        <x-ui-button variant="secondary" size="sm" wire:click="editSupplierArticle({{ $supplierArticle->id }})">
+                                        <x-ui-button variant="secondary" size="sm" wire:click="openEditModal({{ $supplierArticle->id }})">
                                             @svg('heroicon-o-pencil', 'w-4 h-4')
                                         </x-ui-button>
-                                        <x-ui-button 
-                                            variant="danger-outline" 
+                                        <x-ui-confirm-button 
+                                            action="deleteSupplierArticle" 
+                                            :params="['supplierArticleId' => $supplierArticle->id]"
+                                            text="" 
+                                            confirmText="Wirklich löschen?" 
+                                            variant="danger-outline"
                                             size="sm"
-                                            wire:click="deleteSupplierArticle({{ $supplierArticle->id }})"
-                                            onclick="return confirm('Wirklich löschen?')"
-                                        >
-                                            @svg('heroicon-o-trash', 'w-4 h-4')
-                                        </x-ui-button>
+                                            :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
+                                        />
                                     </div>
                                 </x-ui-table-cell>
                             </x-ui-table-row>
@@ -622,6 +623,109 @@
                         Speichern
                     </x-ui-button>
                 @endif
+            </div>
+        </x-slot>
+    </x-ui-modal>
+
+    <!-- Edit Supplier Article Modal -->
+    <x-ui-modal wire:model="editModalShow" size="md">
+        <x-slot name="header">
+            <div class="d-flex items-center gap-2">
+                @svg('heroicon-o-pencil', 'w-6 h-6 text-primary')
+                Lieferanten-Artikel bearbeiten
+            </div>
+        </x-slot>
+
+        <div class="space-y-4">
+            <x-ui-input-select
+                name="editSupplierArticle.supplier_id"
+                label="Lieferant"
+                :options="$this->availableSuppliers"
+                optionValue="id"
+                optionLabel="name"
+                wire:model.live="editSupplierArticle.supplier_id"
+                required
+            />
+
+            <div class="grid grid-cols-2 gap-4">
+                <x-ui-input-text
+                    name="editSupplierArticle.supplier_article_number"
+                    label="Lieferanten-Artikel-Nr"
+                    wire:model.live="editSupplierArticle.supplier_article_number"
+                />
+                <x-ui-input-text
+                    name="editSupplierArticle.supplier_ean"
+                    label="Lieferanten-EAN"
+                    wire:model.live="editSupplierArticle.supplier_ean"
+                />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <x-ui-input-text
+                    name="editSupplierArticle.purchase_price"
+                    label="Einkaufspreis"
+                    type="number"
+                    step="0.01"
+                    wire:model.live="editSupplierArticle.purchase_price"
+                />
+                <x-ui-input-select
+                    name="editSupplierArticle.currency"
+                    label="Währung"
+                    :options="$this->currencies"
+                    optionValue="key"
+                    optionLabel="value"
+                    wire:model.live="editSupplierArticle.currency"
+                    required
+                />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <x-ui-input-text
+                    name="editSupplierArticle.minimum_order_quantity"
+                    label="Mindestbestellmenge"
+                    type="number"
+                    wire:model.live="editSupplierArticle.minimum_order_quantity"
+                />
+                <x-ui-input-text
+                    name="editSupplierArticle.delivery_time_days"
+                    label="Lieferzeit (Tage)"
+                    type="number"
+                    wire:model.live="editSupplierArticle.delivery_time_days"
+                />
+            </div>
+
+            <x-ui-input-textarea
+                name="editSupplierArticle.notes"
+                label="Notizen"
+                wire:model.live="editSupplierArticle.notes"
+                rows="3"
+            />
+
+            <x-ui-input-checkbox
+                model="editSupplierArticle.is_active"
+                checked-label="Aktiv"
+                unchecked-label="Inaktiv"
+                size="md"
+                block="true"
+            />
+        </div>
+
+        <x-slot name="footer">
+            <div class="d-flex justify-end gap-3">
+                <x-ui-button
+                    type="button"
+                    variant="secondary-outline"
+                    wire:click="closeEditModal"
+                >
+                    Abbrechen
+                </x-ui-button>
+                <x-ui-button
+                    type="submit"
+                    variant="primary"
+                    wire:click="updateSupplierArticle"
+                >
+                    Aktualisieren
+                </x-ui-button>
             </div>
         </x-slot>
     </x-ui-modal>
