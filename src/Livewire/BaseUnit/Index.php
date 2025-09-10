@@ -80,6 +80,25 @@ class Index extends Component
         $this->closeCreateModal();
     }
 
+    public function seedDefaultUnits(): void
+    {
+        // Prüfen ob bereits Daten vorhanden sind
+        if (FsBaseUnit::count() > 0) {
+            $this->addError('seed', 'Base units already exist. Please clear existing data first.');
+            return;
+        }
+
+        try {
+            // Seeder ausführen
+            $seeder = new \Platform\FoodService\Database\Seeders\FsBaseUnitSeeder();
+            $seeder->run();
+            
+            session()->flash('message', 'Default base units seeded successfully!');
+        } catch (\Exception $e) {
+            $this->addError('seed', 'Error seeding base units: ' . $e->getMessage());
+        }
+    }
+
     public function getTreeItemsProperty()
     {
         $allItems = FsBaseUnit::with(['parent'])->orderBy('name')->get();

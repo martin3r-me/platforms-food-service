@@ -1,8 +1,34 @@
 <div>
     <div class="d-flex justify-between items-center mb-4">
         <h1 class="text-xl font-semibold">Base Units</h1>
-        <x-ui-button variant="primary" wire:click="openCreateModal">New Category</x-ui-button>
+        <div class="d-flex gap-2">
+            @if($items->count() === 0)
+                <x-ui-button 
+                    variant="secondary" 
+                    wire:click="seedDefaultUnits"
+                    wire:confirm="This will create default base units (Gewicht, Volumen, Stück) with all standard units. Continue?"
+                >
+                    <div class="d-flex items-center gap-2">
+                        @svg('heroicon-o-sparkles', 'w-4 h-4')
+                        Seed Default Units
+                    </div>
+                </x-ui-button>
+            @endif
+            <x-ui-button variant="primary" wire:click="openCreateModal">New Category</x-ui-button>
+        </div>
     </div>
+
+    @if (session()->has('message'))
+        <div class="mb-4 p-3 bg-success text-on-success rounded">
+            {{ session('message') }}
+        </div>
+    @endif
+
+    @error('seed')
+        <div class="mb-4 p-3 bg-danger text-on-danger rounded">
+            {{ $message }}
+        </div>
+    @enderror
 
     @if($items->count() > 0)
         <x-ui-table compact="true">
