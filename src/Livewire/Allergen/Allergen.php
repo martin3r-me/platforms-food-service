@@ -23,6 +23,7 @@ class Allergen extends Component
             'allergen.name' => ['required', 'string', 'max:255'],
             'allergen.description' => ['nullable', 'string'],
             'allergen.is_strict' => ['boolean'],
+            'allergen.is_active' => ['boolean'],
             'allergen.parent_id' => [
                 'nullable',
                 'integer',

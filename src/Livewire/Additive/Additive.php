@@ -23,6 +23,7 @@ class Additive extends Component
             'additive.name' => ['required', 'string', 'max:255'],
             'additive.description' => ['nullable', 'string'],
             'additive.is_strict' => ['boolean'],
+            'additive.is_active' => ['boolean'],
             'additive.parent_id' => [
                 'nullable',
                 'integer',

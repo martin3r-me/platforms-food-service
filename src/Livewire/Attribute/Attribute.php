@@ -23,6 +23,7 @@ class Attribute extends Component
             'attribute.name' => ['required', 'string', 'max:255'],
             'attribute.description' => ['nullable', 'string'],
             'attribute.is_strict' => ['boolean'],
+            'attribute.is_active' => ['boolean'],
             'attribute.parent_id' => [
                 'nullable',
                 'integer',

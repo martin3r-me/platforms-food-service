@@ -35,7 +35,7 @@
                     <x-ui-input-text 
                         name="allergen.name"
                         label="Name"
-                        wire:model.live.debounce.500ms="allergen.name"
+                        wire:model.live="allergen.name"
                         required
                         :errorKey="'allergen.name'"
                     />
@@ -64,7 +64,7 @@
                     <x-ui-input-textarea 
                         name="allergen.description"
                         label="Description"
-                        wire:model.live.debounce.500ms="allergen.description"
+                        wire:model.live="allergen.description"
                         rows="4"
                         :errorKey="'allergen.description'"
                     />

@@ -32,7 +32,7 @@
                     <x-ui-input-text 
                         name="additive.name"
                         label="Name"
-                        wire:model.live.debounce.500ms="additive.name"
+                        wire:model.live="additive.name"
                         required
                         :errorKey="'additive.name'"
                     />
@@ -61,7 +61,7 @@
                     <x-ui-input-textarea 
                         name="additive.description"
                         label="Description"
-                        wire:model.live.debounce.500ms="additive.description"
+                        wire:model.live="additive.description"
                         rows="4"
                         :errorKey="'additive.description'"
                     />
