@@ -68,7 +68,7 @@ class Show extends Component
         session()->flash('message', 'Artikel erfolgreich aktualisiert.');
     }
 
-    public function deleteItem(): void
+    public function deleteItem()
     {
         $this->article->delete();
         
