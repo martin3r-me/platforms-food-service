@@ -119,7 +119,7 @@ class FsArticle extends Model
      */
     public function supplierArticles()
     {
-        return $this->hasMany(FsSupplierArticle::class);
+        return $this->hasMany(FsSupplierArticle::class, 'article_id');
     }
 
     /**

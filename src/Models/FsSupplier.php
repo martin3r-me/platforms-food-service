@@ -61,7 +61,7 @@ class FsSupplier extends Model
      */
     public function supplierArticles(): HasMany
     {
-        return $this->hasMany(FsSupplierArticle::class);
+        return $this->hasMany(FsSupplierArticle::class, 'supplier_id');
     }
 
     /**
