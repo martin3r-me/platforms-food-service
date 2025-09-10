@@ -17,9 +17,9 @@
         <x-slot name="header">Create Allergen</x-slot>
 
         <form wire:submit.prevent="createItem" class="space-y-4">
-            <x-ui-input-text label="Name" wire:model.live="name" required />
-            <x-ui-input-textarea label="Description" wire:model.live="description" rows="3" />
-            <x-ui-input-checkbox label="Strict (hard)" wire:model.live="is_strict" />
+            <x-ui-input-text name="name" label="Name" wire:model.live="name" required />
+            <x-ui-input-textarea name="description" label="Description" wire:model.live="description" rows="3" />
+            <x-ui-input-checkbox model="is_strict" checked-label="Strict (hard)" unchecked-label="Strict (hard)" />
         </form>
 
         <x-slot name="footer">
