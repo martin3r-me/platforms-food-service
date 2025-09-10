@@ -36,13 +36,6 @@
                         required
                         :errorKey="'additive.name'"
                     />
-                    <x-ui-input-checkbox
-                        model="additive.is_strict"
-                        checked-label="Strict (hard)"
-                        unchecked-label="Strict (hard)"
-                        size="md"
-                        block="true"
-                    />
                 </div>
                 <div class="mt-4">
                     <x-ui-input-select
@@ -66,28 +59,8 @@
                         :errorKey="'additive.description'"
                     />
                 </div>
-                @if($additive->parent)
-                    <div class="mt-2 text-sm">
-                        Parent: 
-                        <a href="{{ route('foodservice.additives.show', ['additive' => $additive->parent]) }}" class="text-primary underline" wire:navigate>
-                            {{ $additive->parent->name }}
-                        </a>
-                    </div>
-                @endif
             </div>
-
-            @if($additive->children->count() > 0)
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold mb-2 text-secondary">Children</h3>
-                    <div class="space-y-1">
-                        @foreach($additive->children as $child)
-                            <a href="{{ route('foodservice.additives.show', ['additive' => $child]) }}" class="block text-sm text-primary underline" wire:navigate>
-                                {{ $child->name }}
-                            </a>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
+            
         </div>
 
         <div x-data="{ open: false }" class="flex-shrink-0 border-t border-muted">
@@ -130,6 +103,50 @@
                     <div><strong>Strict:</strong> {{ $additive->is_strict ? 'Hard' : 'Soft' }}</div>
                 </div>
             </div>
+
+            <x-ui-input-checkbox
+                model="additive.is_strict"
+                checked-label="Strict (hard)"
+                unchecked-label="Strict (hard)"
+                size="md"
+                block="true"
+            />
+
+            <div class="mb-4">
+                <h4 class="font-semibold mb-2">Parent</h4>
+                <div class="space-y-2">
+                    <x-ui-input-select
+                        name="additive.parent_id"
+                        :options="$this->parentOptions"
+                        optionValue="id"
+                        optionLabel="name"
+                        :nullable="true"
+                        nullLabel="– None –"
+                        wire:model.live="additive.parent_id"
+                    />
+                    @if($additive->parent)
+                        <div class="text-sm">
+                            Aktuell: 
+                            <a href="{{ route('foodservice.additives.show', ['additive' => $additive->parent]) }}" class="text-primary underline" wire:navigate>
+                                {{ $additive->parent->name }}
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            @if($additive->children->count() > 0)
+                <div class="mb-4">
+                    <h4 class="font-semibold mb-2">Children</h4>
+                    <div class="space-y-1">
+                        @foreach($additive->children as $child)
+                            <a href="{{ route('foodservice.additives.show', ['additive' => $child]) }}" class="block text-sm text-primary underline" wire:navigate>
+                                {{ $child->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
             <x-ui-input-checkbox
                 model="additive.is_active"
