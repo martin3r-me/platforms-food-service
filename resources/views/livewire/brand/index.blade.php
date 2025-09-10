@@ -33,4 +33,21 @@
     @else
         <div class="text-center py-8 text-sm text-muted">No brands yet</div>
     @endif
+
+    <x-ui-modal wire:model="modalShow" size="md">
+        <x-slot name="header">Create Brand</x-slot>
+
+        <form wire:submit.prevent="createItem" class="space-y-4">
+            <x-ui-input-text name="name" label="Name" wire:model.live="name" required />
+            <x-ui-input-textarea name="description" label="Description" wire:model.live="description" rows="3" />
+            <x-ui-input-checkbox model="is_active" checked-label="Active" unchecked-label="Inactive" />
+        </form>
+
+        <x-slot name="footer">
+            <div class="d-flex justify-end gap-2">
+                <x-ui-button type="button" variant="secondary-outline" @click="$wire.closeCreateModal()">Cancel</x-ui-button>
+                <x-ui-button type="button" variant="primary" wire:click="createItem">Create</x-ui-button>
+            </div>
+        </x-slot>
+    </x-ui-modal>
 </div>
