@@ -31,6 +31,13 @@ class Index extends Component
         $this->resetValidation();
         $this->reset(['name', 'description', 'is_active', 'cluster_id', 'parent_id']);
         $this->is_active = true;
+        
+        // Wenn nur ein Cluster existiert, automatisch vorauswählen
+        $clusters = FsArticleCluster::orderBy('name')->get();
+        if ($clusters->count() === 1) {
+            $this->cluster_id = $clusters->first()->id;
+        }
+        
         $this->modalShow = true;
     }
 
