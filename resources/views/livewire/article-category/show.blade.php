@@ -66,6 +66,85 @@
                     />
                 </div>
             </div>
+
+            {{-- Children Section --}}
+            <div class="mb-6">
+                <div class="d-flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-secondary">Children</h3>
+                    <x-ui-button 
+                        variant="primary" 
+                        size="sm"
+                        wire:click="openCreateModal({{ $category->id }})"
+                    >
+                        <div class="d-flex items-center gap-2">
+                            @svg('heroicon-o-plus', 'w-4 h-4')
+                            New Sub-Category
+                        </div>
+                    </x-ui-button>
+                </div>
+                
+                @if($this->childrenTree->count() > 0)
+                    <x-ui-table compact="true">
+                        <x-ui-table-header>
+                            <x-ui-table-header-cell compact="true">Name</x-ui-table-header-cell>
+                            <x-ui-table-header-cell compact="true">Cluster</x-ui-table-header-cell>
+                            <x-ui-table-header-cell compact="true">Status</x-ui-table-header-cell>
+                            <x-ui-table-header-cell compact="true" align="right">Actions</x-ui-table-header-cell>
+                        </x-ui-table-header>
+
+                        <x-ui-table-body>
+                            @foreach($this->childrenTree as $child)
+                                <x-ui-table-row compact="true">
+                                    <x-ui-table-cell compact="true">
+                                        <div class="d-flex items-center gap-2">
+                                            @if($child->level > 0)
+                                                <span class="text-muted" style="margin-left: {{ ($child->level - 1) * 20 }}px;">
+                                                    @if($child->level == 1)
+                                                        └─
+                                                    @else
+                                                        &nbsp;&nbsp;└─
+                                                    @endif
+                                                </span>
+                                            @endif
+                                            <a href="{{ route('foodservice.article-categories.show', ['category' => $child]) }}" class="underline" wire:navigate>
+                                                {{ $child->name }}
+                                            </a>
+                                        </div>
+                                    </x-ui-table-cell>
+                                    <x-ui-table-cell compact="true">{{ $child->cluster?->name }}</x-ui-table-cell>
+                                    <x-ui-table-cell compact="true">
+                                        <x-ui-badge variant="{{ $child->is_active ? 'success' : 'secondary' }}" size="sm">
+                                            {{ $child->is_active ? 'Active' : 'Inactive' }}
+                                        </x-ui-badge>
+                                    </x-ui-table-cell>
+                                    <x-ui-table-cell compact="true" align="right">
+                                        <div class="d-flex gap-1 justify-end">
+                                            <x-ui-button 
+                                                size="sm" 
+                                                variant="primary-outline" 
+                                                wire:click="openCreateModal({{ $child->id }})"
+                                                title="Add Sub-Category"
+                                            >
+                                                @svg('heroicon-o-plus', 'w-4 h-4')
+                                            </x-ui-button>
+                                            <x-ui-button 
+                                                size="sm" 
+                                                variant="secondary" 
+                                                :href="route('foodservice.article-categories.show', ['category' => $child])" 
+                                                wire:navigate
+                                            >
+                                                Open
+                                            </x-ui-button>
+                                        </div>
+                                    </x-ui-table-cell>
+                                </x-ui-table-row>
+                            @endforeach
+                        </x-ui-table-body>
+                    </x-ui-table>
+                @else
+                    <div class="text-center py-8 text-sm text-muted">No sub-categories yet</div>
+                @endif
+            </div>
         </div>
     </div>
 
@@ -86,7 +165,7 @@
             <x-ui-input-select
                 name="category.parent_id"
                 label="Parent (optional)"
-                :options="$this->parentOptions"
+                :options="$this->categoryParentOptions"
                 optionValue="id"
                 optionLabel="name"
                 :nullable="true"
@@ -105,4 +184,57 @@
     </div>
 </div>
 
+{{-- Create Modal --}}
+<x-ui-modal wire:model="modalShow" size="md">
+    <x-slot name="header">
+        @if($selectedParentId)
+            Create Sub-Category
+        @else
+            Create Article Category
+        @endif
+    </x-slot>
 
+    <form wire:submit.prevent="createItem" class="space-y-4">
+        <x-ui-input-text name="name" label="Name" wire:model.live="name" required />
+        <x-ui-input-textarea name="description" label="Description" wire:model.live="description" rows="3" />
+        
+        @if($selectedParentId)
+            {{-- Parent ausgewählt - Cluster und Parent sind bereits gesetzt --}}
+            <div class="p-3 bg-muted rounded">
+                <div class="text-sm text-muted mb-1">Parent Category:</div>
+                <div class="font-medium">{{ \Platform\FoodService\Models\FsArticleCategory::find($selectedParentId)?->name }}</div>
+            </div>
+        @else
+            {{-- Neuer Parent - Cluster auswählen --}}
+            <x-ui-input-select
+                name="cluster_id"
+                label="Cluster"
+                :options="$clusters"
+                optionValue="id"
+                optionLabel="name"
+                :nullable="false"
+                wire:model.live="cluster_id"
+                required
+            />
+            <x-ui-input-select
+                name="parent_id"
+                label="Parent (optional)"
+                :options="$this->parentOptions"
+                optionValue="id"
+                optionLabel="name"
+                :nullable="true"
+                nullLabel="– None –"
+                wire:model.live="parent_id"
+            />
+        @endif
+        
+        <x-ui-input-checkbox model="is_active" checked-label="Active" unchecked-label="Inactive" />
+    </form>
+
+    <x-slot name="footer">
+        <div class="d-flex justify-end gap-2">
+            <x-ui-button type="button" variant="secondary-outline" @click="$wire.closeCreateModal()">Cancel</x-ui-button>
+            <x-ui-button type="button" variant="primary" wire:click="createItem">Create</x-ui-button>
+        </div>
+    </x-slot>
+</x-ui-modal>
