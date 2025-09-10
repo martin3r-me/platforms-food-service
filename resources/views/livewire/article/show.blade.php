@@ -309,15 +309,14 @@
                                         <x-ui-button variant="secondary" size="sm" wire:click="editSupplierArticle({{ $supplierArticle->id }})">
                                             @svg('heroicon-o-pencil', 'w-4 h-4')
                                         </x-ui-button>
-                                        <x-ui-confirm-button 
-                                            action="deleteSupplierArticle" 
-                                            :params="['supplierArticleId' => $supplierArticle->id]"
-                                            text="" 
-                                            confirmText="Wirklich löschen?" 
-                                            variant="danger-outline"
+                                        <x-ui-button 
+                                            variant="danger-outline" 
                                             size="sm"
-                                            :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
-                                        />
+                                            wire:click="deleteSupplierArticle({{ $supplierArticle->id }})"
+                                            onclick="return confirm('Wirklich löschen?')"
+                                        >
+                                            @svg('heroicon-o-trash', 'w-4 h-4')
+                                        </x-ui-button>
                                     </div>
                                 </x-ui-table-cell>
                             </x-ui-table-row>

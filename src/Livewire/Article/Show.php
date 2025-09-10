@@ -86,6 +86,16 @@ class Show extends Component
             'article.is_active' => 'boolean',
             'settingsForm.description' => 'nullable|string',
             'settingsForm.is_active' => 'boolean',
+            // Supplier Article validation rules
+            'newSupplierArticle.supplier_id' => 'required|exists:fs_suppliers,id',
+            'newSupplierArticle.supplier_article_number' => 'nullable|string|max:255',
+            'newSupplierArticle.supplier_ean' => 'nullable|string|max:255',
+            'newSupplierArticle.purchase_price' => 'nullable|numeric|min:0',
+            'newSupplierArticle.currency' => 'required|string|max:3',
+            'newSupplierArticle.minimum_order_quantity' => 'nullable|integer|min:1',
+            'newSupplierArticle.delivery_time_days' => 'nullable|integer|min:0',
+            'newSupplierArticle.notes' => 'nullable|string',
+            'newSupplierArticle.is_active' => 'boolean',
         ];
     }
 
@@ -292,7 +302,7 @@ class Show extends Component
 
     public function saveSupplierArticle()
     {
-        $this->validate([
+        $rules = [
             'newSupplierArticle.supplier_id' => 'required|exists:fs_suppliers,id',
             'newSupplierArticle.supplier_article_number' => 'nullable|string|max:255',
             'newSupplierArticle.supplier_ean' => 'nullable|string|max:255',
@@ -302,7 +312,9 @@ class Show extends Component
             'newSupplierArticle.delivery_time_days' => 'nullable|integer|min:0',
             'newSupplierArticle.notes' => 'nullable|string',
             'newSupplierArticle.is_active' => 'boolean',
-        ]);
+        ];
+
+        $this->validate($rules);
 
         $data = [
             'supplier_id' => $this->newSupplierArticle['supplier_id'],
