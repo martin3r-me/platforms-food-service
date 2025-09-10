@@ -23,9 +23,8 @@ class Show extends Component
     public $settingsModalShow = false;
     
     // Modals
-    public $allergenModalShow = false;
-    public $additiveModalShow = false;
-    public $attributeModalShow = false;
+    public $modalShow = false;
+    public $modalType = ''; // 'allergen', 'additive', 'attribute'
     
     // Track if form is dirty
     public $isDirty = false;
@@ -102,37 +101,47 @@ class Show extends Component
         return redirect()->route('foodservice.articles.index');
     }
 
-    public function saveAllergens()
+    public function openModal($type)
     {
-        $this->article->allergens()->sync($this->selectedAllergens);
-        $this->article->load(['allergens']);
-        
-        $this->allergenModalShow = false;
-        session()->flash('message', 'Allergene erfolgreich gespeichert.');
+        $this->modalType = $type;
+        $this->modalShow = true;
     }
 
-    public function saveAdditives()
+    public function closeModal()
     {
-        $this->article->additives()->sync($this->selectedAdditives);
-        $this->article->load(['additives']);
-        
-        $this->additiveModalShow = false;
-        session()->flash('message', 'Zusatzstoffe erfolgreich gespeichert.');
+        $this->modalShow = false;
+        $this->modalType = '';
     }
 
-    public function saveAttributes()
+    public function saveRelationships()
     {
-        $attributeData = [];
-        foreach ($this->attributeValues as $attributeId => $value) {
-            if (!empty($value)) {
-                $attributeData[$attributeId] = ['value' => $value];
-            }
+        switch ($this->modalType) {
+            case 'allergen':
+                $this->article->allergens()->sync($this->selectedAllergens);
+                $this->article->load(['allergens']);
+                session()->flash('message', 'Allergene erfolgreich gespeichert.');
+                break;
+                
+            case 'additive':
+                $this->article->additives()->sync($this->selectedAdditives);
+                $this->article->load(['additives']);
+                session()->flash('message', 'Zusatzstoffe erfolgreich gespeichert.');
+                break;
+                
+            case 'attribute':
+                $attributeData = [];
+                foreach ($this->attributeValues as $attributeId => $value) {
+                    if (!empty($value)) {
+                        $attributeData[$attributeId] = ['value' => $value];
+                    }
+                }
+                $this->article->attributes()->sync($attributeData);
+                $this->article->load(['attributes']);
+                session()->flash('message', 'Attribute erfolgreich gespeichert.');
+                break;
         }
-        $this->article->attributes()->sync($attributeData);
-        $this->article->load(['attributes']);
         
-        $this->attributeModalShow = false;
-        session()->flash('message', 'Attribute erfolgreich gespeichert.');
+        $this->closeModal();
     }
 
     public function saveSettings(): void
