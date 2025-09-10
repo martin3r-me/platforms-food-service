@@ -111,7 +111,6 @@ class FsArticle extends Model
     public function attributes()
     {
         return $this->belongsToMany(FsAttribute::class, 'fs_article_attributes', 'article_id', 'attribute_id')
-            ->withPivot('value')
             ->withTimestamps();
     }
 }
