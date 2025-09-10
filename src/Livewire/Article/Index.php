@@ -119,17 +119,6 @@ class Index extends Component
             ->get();
     }
 
-    #[Computed]
-    public function stats()
-    {
-        $teamId = auth()->user()->currentTeam->id;
-        
-        return [
-            'total' => FsArticle::forTeam($teamId)->count(),
-            'active' => FsArticle::forTeam($teamId)->where('is_active', true)->count(),
-            'inactive' => FsArticle::forTeam($teamId)->where('is_active', false)->count(),
-        ];
-    }
 
     public function createArticle()
     {

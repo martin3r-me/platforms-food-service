@@ -17,32 +17,6 @@
                 </div>
             </div>
 
-            <!-- Statistiken -->
-            <div class="grid grid-cols-3 gap-4 mb-6">
-                <x-ui-dashboard-tile
-                    title="Gesamt Artikel"
-                    :count="$this->stats['total']"
-                    icon="cube"
-                    variant="primary"
-                    size="sm"
-                />
-
-                <x-ui-dashboard-tile
-                    title="Aktive Artikel"
-                    :count="$this->stats['active']"
-                    icon="check-circle"
-                    variant="success"
-                    size="sm"
-                />
-
-                <x-ui-dashboard-tile
-                    title="Inaktive Artikel"
-                    :count="$this->stats['inactive']"
-                    icon="x-circle"
-                    variant="secondary"
-                    size="sm"
-                />
-            </div>
 
             <!-- Artikel Tabelle -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
