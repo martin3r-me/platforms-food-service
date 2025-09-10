@@ -8,6 +8,7 @@
         <x-ui-table compact="true">
             <x-ui-table-header>
                 <x-ui-table-header-cell compact="true">Name</x-ui-table-header-cell>
+                <x-ui-table-header-cell compact="true">Parent</x-ui-table-header-cell>
                 <x-ui-table-header-cell compact="true">Strict</x-ui-table-header-cell>
                 <x-ui-table-header-cell compact="true">Status</x-ui-table-header-cell>
                 <x-ui-table-header-cell compact="true" align="right">Action</x-ui-table-header-cell>
@@ -17,6 +18,9 @@
                 @foreach($items as $item)
                     <x-ui-table-row compact="true" clickable="true" :href="route('foodservice.allergens.show', ['allergen' => $item])" wire:navigate>
                         <x-ui-table-cell compact="true">{{ $item->name }}</x-ui-table-cell>
+                        <x-ui-table-cell compact="true">
+                            {{ $item->parent?->name ?? '–' }}
+                        </x-ui-table-cell>
                         <x-ui-table-cell compact="true">
                             <x-ui-badge variant="secondary" size="sm">{{ $item->is_strict ? 'Hard' : 'Soft' }}</x-ui-badge>
                         </x-ui-table-cell>

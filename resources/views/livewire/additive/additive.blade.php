@@ -45,6 +45,19 @@
                     />
                 </div>
                 <div class="mt-4">
+                    <x-ui-input-select
+                        name="additive.parent_id"
+                        label="Parent"
+                        :options="\\Platform\\FoodService\\Models\\FsAdditive::orderBy('name')->get()"
+                        optionValue="id"
+                        optionLabel="name"
+                        :nullable="true"
+                        nullLabel="– None –"
+                        wire:model.live="additive.parent_id"
+                    />
+                </div>
+
+                <div class="mt-4">
                     <x-ui-input-textarea 
                         name="additive.description"
                         label="Description"
@@ -53,7 +66,28 @@
                         :errorKey="'additive.description'"
                     />
                 </div>
+                @if($additive->parent)
+                    <div class="mt-2 text-sm">
+                        Parent: 
+                        <a href="{{ route('foodservice.additives.show', ['additive' => $additive->parent]) }}" class="text-primary underline" wire:navigate>
+                            {{ $additive->parent->name }}
+                        </a>
+                    </div>
+                @endif
             </div>
+
+            @if($additive->children->count() > 0)
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2 text-secondary">Children</h3>
+                    <div class="space-y-1">
+                        @foreach($additive->children as $child)
+                            <a href="{{ route('foodservice.additives.show', ['additive' => $child]) }}" class="block text-sm text-primary underline" wire:navigate>
+                                {{ $child->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
 
         <div x-data="{ open: false }" class="flex-shrink-0 border-t border-muted">

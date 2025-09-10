@@ -18,6 +18,7 @@ class FsAdditive extends Model
         'description',
         'is_strict',
         'is_active',
+        'parent_id',
     ];
 
     protected $casts = [
@@ -46,6 +47,16 @@ class FsAdditive extends Model
     public function scopeInactive($query)
     {
         return $query->where('is_active', false);
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
     }
 }
 

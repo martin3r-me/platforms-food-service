@@ -48,6 +48,19 @@
                     />
                 </div>
                 <div class="mt-4">
+                    <x-ui-input-select
+                        name="allergen.parent_id"
+                        label="Parent"
+                        :options="\\Platform\\FoodService\\Models\\FsAllergen::orderBy('name')->get()"
+                        optionValue="id"
+                        optionLabel="name"
+                        :nullable="true"
+                        nullLabel="– None –"
+                        wire:model.live="allergen.parent_id"
+                    />
+                </div>
+
+                <div class="mt-4">
                     <x-ui-input-textarea 
                         name="allergen.description"
                         label="Description"
@@ -56,7 +69,27 @@
                         :errorKey="'allergen.description'"
                     />
                 </div>
+                @if($allergen->parent)
+                    <div class="mt-2 text-sm">
+                        Parent: 
+                        <a href="{{ route('foodservice.allergens.show', ['allergen' => $allergen->parent]) }}" class="text-primary underline" wire:navigate>
+                            {{ $allergen->parent->name }}
+                        </a>
+                    </div>
+                @endif
             </div>
+            @if($allergen->children->count() > 0)
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2 text-secondary">Children</h3>
+                    <div class="space-y-1">
+                        @foreach($allergen->children as $child)
+                            <a href="{{ route('foodservice.allergens.show', ['allergen' => $child]) }}" class="block text-sm text-primary underline" wire:navigate>
+                                {{ $child->name }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
 
         <!-- Aktivitäten -->

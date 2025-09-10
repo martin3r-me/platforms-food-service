@@ -4,6 +4,7 @@ namespace Platform\FoodService\Livewire\Additive;
 
 use Livewire\Component;
 use Platform\FoodService\Models\FsAdditive;
+use Illuminate\Validation\Rule;
 
 class Additive extends Component
 {
@@ -22,6 +23,12 @@ class Additive extends Component
             'additive.name' => ['required', 'string', 'max:255'],
             'additive.description' => ['nullable', 'string'],
             'additive.is_strict' => ['boolean'],
+            'additive.parent_id' => [
+                'nullable',
+                'integer',
+                Rule::notIn([$this->additive->id]),
+                'exists:fs_additives,id',
+            ],
         ];
     }
 

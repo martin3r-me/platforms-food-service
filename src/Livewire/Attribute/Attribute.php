@@ -4,6 +4,7 @@ namespace Platform\FoodService\Livewire\Attribute;
 
 use Livewire\Component;
 use Platform\FoodService\Models\FsAttribute;
+use Illuminate\Validation\Rule;
 
 class Attribute extends Component
 {
@@ -22,6 +23,12 @@ class Attribute extends Component
             'attribute.name' => ['required', 'string', 'max:255'],
             'attribute.description' => ['nullable', 'string'],
             'attribute.is_strict' => ['boolean'],
+            'attribute.parent_id' => [
+                'nullable',
+                'integer',
+                Rule::notIn([$this->attribute->id]),
+                'exists:fs_attributes,id',
+            ],
         ];
     }
 

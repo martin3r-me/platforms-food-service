@@ -4,6 +4,7 @@ namespace Platform\FoodService\Livewire\Allergen;
 
 use Livewire\Component;
 use Platform\FoodService\Models\FsAllergen;
+use Illuminate\Validation\Rule;
 
 class Allergen extends Component
 {
@@ -22,6 +23,12 @@ class Allergen extends Component
             'allergen.name' => ['required', 'string', 'max:255'],
             'allergen.description' => ['nullable', 'string'],
             'allergen.is_strict' => ['boolean'],
+            'allergen.parent_id' => [
+                'nullable',
+                'integer',
+                Rule::notIn([$this->allergen->id]),
+                'exists:fs_allergens,id',
+            ],
         ];
     }
 
