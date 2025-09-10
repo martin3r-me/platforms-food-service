@@ -22,6 +22,9 @@ class Show extends Component
     // Settings Modal
     public $settingsModalShow = false;
     
+    // Track if form is dirty
+    public $isDirty = false;
+    
     // Settings Form
     public $settingsForm = [
         'description' => '',
@@ -49,6 +52,11 @@ class Show extends Component
         ];
     }
 
+    public function updated($propertyName)
+    {
+        $this->isDirty = true;
+    }
+
     public function rules(): array
     {
         return [
@@ -64,6 +72,7 @@ class Show extends Component
     {
         $this->validate();
         $this->article->save();
+        $this->isDirty = false;
 
         session()->flash('message', 'Artikel erfolgreich aktualisiert.');
     }
