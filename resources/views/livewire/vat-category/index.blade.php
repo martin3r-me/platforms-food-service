@@ -8,6 +8,7 @@
         <x-ui-table compact="true">
             <x-ui-table-header>
                 <x-ui-table-header-cell compact="true">Name</x-ui-table-header-cell>
+                <x-ui-table-header-cell compact="true">Current rate</x-ui-table-header-cell>
                 <x-ui-table-header-cell compact="true">Status</x-ui-table-header-cell>
                 <x-ui-table-header-cell compact="true" align="right">Action</x-ui-table-header-cell>
             </x-ui-table-header>
@@ -16,6 +17,26 @@
                 @foreach($items as $item)
                     <x-ui-table-row compact="true" clickable="true" :href="route('foodservice.vat-categories.show', ['category' => $item])" wire:navigate>
                         <x-ui-table-cell compact="true">{{ $item->name }}</x-ui-table-cell>
+                        <x-ui-table-cell compact="true">
+                            @php
+                                $current = $item->rates()
+                                    ->whereDate('valid_from', '<=', now()->toDateString())
+                                    ->where(function ($q) { $q->whereNull('valid_until')->orWhereDate('valid_until', '>=', now()->toDateString()); })
+                                    ->orderByDesc('valid_from')
+                                    ->first();
+                            @endphp
+                            @if($current)
+                                <div class="text-sm">{{ number_format($current->rate_percent, 2) }} %</div>
+                                <div class="text-xs text-muted">
+                                    {{ optional($current->valid_from)?->format('Y-m-d') }}
+                                    @if($current->valid_until)
+                                        – {{ optional($current->valid_until)?->format('Y-m-d') }}
+                                    @endif
+                                </div>
+                            @else
+                                <span class="text-xs text-muted">–</span>
+                            @endif
+                        </x-ui-table-cell>
                         <x-ui-table-cell compact="true">
                             <x-ui-badge variant="{{ $item->is_active ? 'success' : 'secondary' }}" size="sm">
                                 {{ $item->is_active ? 'Active' : 'Inactive' }}
