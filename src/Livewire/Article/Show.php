@@ -247,6 +247,96 @@ class Show extends Component
         'supplierArticleUpdated' => '$refresh',
     ];
 
+    // Supplier Article Form
+    public $newSupplierArticle = [
+        'supplier_id' => '',
+        'supplier_article_number' => '',
+        'supplier_ean' => '',
+        'purchase_price' => '',
+        'currency' => 'EUR',
+        'minimum_order_quantity' => '',
+        'delivery_time_days' => '',
+        'notes' => '',
+        'is_active' => true,
+    ];
+
+    public function getAvailableSuppliersProperty()
+    {
+        return \Platform\FoodService\Models\FsSupplier::where('team_id', auth()->user()->currentTeam->id)
+            ->where('is_active', true)
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function getCurrenciesProperty()
+    {
+        return [
+            'EUR' => 'Euro (EUR)',
+            'USD' => 'US Dollar (USD)',
+            'CHF' => 'Schweizer Franken (CHF)',
+            'GBP' => 'Britisches Pfund (GBP)',
+        ];
+    }
+
+    public function saveSupplierArticle()
+    {
+        $this->validate([
+            'newSupplierArticle.supplier_id' => 'required|exists:fs_suppliers,id',
+            'newSupplierArticle.supplier_article_number' => 'nullable|string|max:255',
+            'newSupplierArticle.supplier_ean' => 'nullable|string|max:255',
+            'newSupplierArticle.purchase_price' => 'nullable|numeric|min:0',
+            'newSupplierArticle.currency' => 'required|string|max:3',
+            'newSupplierArticle.minimum_order_quantity' => 'nullable|integer|min:1',
+            'newSupplierArticle.delivery_time_days' => 'nullable|integer|min:0',
+            'newSupplierArticle.notes' => 'nullable|string',
+            'newSupplierArticle.is_active' => 'boolean',
+        ]);
+
+        \Platform\FoodService\Models\FsSupplierArticle::create([
+            'supplier_id' => $this->newSupplierArticle['supplier_id'],
+            'article_id' => $this->article->id,
+            'supplier_article_number' => $this->newSupplierArticle['supplier_article_number'] ?: null,
+            'supplier_ean' => $this->newSupplierArticle['supplier_ean'] ?: null,
+            'purchase_price' => $this->newSupplierArticle['purchase_price'] ?: null,
+            'currency' => $this->newSupplierArticle['currency'],
+            'minimum_order_quantity' => $this->newSupplierArticle['minimum_order_quantity'] ?: null,
+            'delivery_time_days' => $this->newSupplierArticle['delivery_time_days'] ?: null,
+            'notes' => $this->newSupplierArticle['notes'] ?: null,
+            'is_active' => $this->newSupplierArticle['is_active'],
+            'team_id' => auth()->user()->currentTeam->id,
+            'created_by_user_id' => auth()->id(),
+            'owned_by_user_id' => auth()->id(),
+        ]);
+
+        $this->resetSupplierArticleForm();
+        $this->dispatch('close-supplier-modal');
+        session()->flash('message', 'Lieferanten-Artikel erfolgreich erstellt!');
+    }
+
+    public function deleteSupplierArticle($supplierArticleId)
+    {
+        $supplierArticle = \Platform\FoodService\Models\FsSupplierArticle::find($supplierArticleId);
+        if ($supplierArticle) {
+            $supplierArticle->delete();
+            session()->flash('message', 'Lieferanten-Artikel erfolgreich gelöscht!');
+        }
+    }
+
+    private function resetSupplierArticleForm()
+    {
+        $this->newSupplierArticle = [
+            'supplier_id' => '',
+            'supplier_article_number' => '',
+            'supplier_ean' => '',
+            'purchase_price' => '',
+            'currency' => 'EUR',
+            'minimum_order_quantity' => '',
+            'delivery_time_days' => '',
+            'notes' => '',
+            'is_active' => true,
+        ];
+    }
+
     public function render()
     {
         return view('foodservice::livewire.article.show')

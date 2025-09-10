@@ -541,5 +541,101 @@
     </x-ui-modal>
 
     <!-- Supplier Modal -->
-    <livewire:food-service::article.supplier-modal :article="$article" />
+    <div x-data="{ supplierModalOpen: false }" 
+         @open-supplier-modal.window="supplierModalOpen = true"
+         @close-supplier-modal.window="supplierModalOpen = false">
+        <x-ui-modal wire:model="supplierModalOpen">
+            <x-slot name="header">
+                <div class="d-flex items-center gap-2">
+                    @svg('heroicon-o-truck', 'w-5 h-5')
+                    Neuer Lieferanten-Artikel
+                </div>
+            </x-slot>
+
+            <div class="space-y-4">
+                <x-ui-input-select
+                    name="supplier_id"
+                    label="Lieferant"
+                    :options="$this->availableSuppliers"
+                    optionValue="id"
+                    optionLabel="name"
+                    wire:model.live="newSupplierArticle.supplier_id"
+                    required
+                />
+
+                <div class="grid grid-cols-2 gap-4">
+                    <x-ui-input-text
+                        name="supplier_article_number"
+                        label="Lieferanten-Artikel-Nr"
+                        wire:model.live="newSupplierArticle.supplier_article_number"
+                    />
+                    <x-ui-input-text
+                        name="supplier_ean"
+                        label="Lieferanten-EAN"
+                        wire:model.live="newSupplierArticle.supplier_ean"
+                    />
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <x-ui-input-text
+                        name="purchase_price"
+                        label="Einkaufspreis"
+                        type="number"
+                        step="0.01"
+                        wire:model.live="newSupplierArticle.purchase_price"
+                    />
+                    <x-ui-input-select
+                        name="currency"
+                        label="Währung"
+                        :options="$this->currencies"
+                        optionValue="key"
+                        optionLabel="value"
+                        wire:model.live="newSupplierArticle.currency"
+                        required
+                    />
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <x-ui-input-text
+                        name="minimum_order_quantity"
+                        label="Mindestbestellmenge"
+                        type="number"
+                        wire:model.live="newSupplierArticle.minimum_order_quantity"
+                    />
+                    <x-ui-input-text
+                        name="delivery_time_days"
+                        label="Lieferzeit (Tage)"
+                        type="number"
+                        wire:model.live="newSupplierArticle.delivery_time_days"
+                    />
+                </div>
+
+                <x-ui-input-textarea
+                    name="notes"
+                    label="Notizen"
+                    wire:model.live="newSupplierArticle.notes"
+                    rows="3"
+                />
+
+                <x-ui-input-checkbox
+                    model="newSupplierArticle.is_active"
+                    checked-label="Aktiv"
+                    unchecked-label="Inaktiv"
+                    size="md"
+                    block="true"
+                />
+            </div>
+
+            <x-slot name="footer">
+                <div class="d-flex gap-2 justify-end">
+                    <x-ui-button variant="secondary" @click="supplierModalOpen = false">
+                        Abbrechen
+                    </x-ui-button>
+                    <x-ui-button variant="primary" wire:click="saveSupplierArticle">
+                        Erstellen
+                    </x-ui-button>
+                </div>
+            </x-slot>
+        </x-ui-modal>
+    </div>
 </div>
