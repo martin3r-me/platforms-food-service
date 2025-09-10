@@ -253,7 +253,7 @@
                 <h3 class="text-lg font-semibold mb-4 text-secondary">Lieferanten</h3>
                 <div class="d-flex items-center justify-between mb-4">
                     <p class="text-sm text-gray-600">Verwalte die Lieferanten für diesen Artikel</p>
-                    <x-ui-button variant="primary" size="sm" wire:click="openModal('supplier')">
+                    <x-ui-button variant="primary" size="sm" wire:click="openCreateModal">
                         @svg('heroicon-o-plus', 'w-4 h-4 mr-1')
                         Neuer Lieferant
                     </x-ui-button>

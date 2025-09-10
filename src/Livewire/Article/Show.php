@@ -142,9 +142,14 @@ class Show extends Component
             $this->selectedAdditives = $this->article->additives->pluck('id')->toArray();
         } elseif ($type === 'attribute') {
             $this->selectedAttributes = $this->article->attributes->pluck('id')->toArray();
-        } elseif ($type === 'supplier') {
-            $this->resetSupplierArticleForm();
         }
+    }
+
+    public function openCreateModal()
+    {
+        $this->resetSupplierArticleForm();
+        $this->modalType = 'supplier';
+        $this->modalShow = true;
     }
 
     public function closeModal()
