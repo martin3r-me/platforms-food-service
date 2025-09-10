@@ -7,10 +7,10 @@
     @if($items->count() > 0)
         <x-ui-table compact="true">
             <x-ui-table-header>
-            <x-ui-table-header-cell compact="true">Name</x-ui-table-header-cell>
-            <x-ui-table-header-cell compact="true">Manufacturers</x-ui-table-header-cell>
-            <x-ui-table-header-cell compact="true">Status</x-ui-table-header-cell>
-            <x-ui-table-header-cell compact="true" align="right">Action</x-ui-table-header-cell>
+                <x-ui-table-header-cell compact="true">Name</x-ui-table-header-cell>
+                <x-ui-table-header-cell compact="true">Manufacturers</x-ui-table-header-cell>
+                <x-ui-table-header-cell compact="true">Status</x-ui-table-header-cell>
+                <x-ui-table-header-cell compact="true" align="right">Action</x-ui-table-header-cell>
             </x-ui-table-header>
 
             <x-ui-table-body>
@@ -88,7 +88,7 @@
                 </div>
             </div>
             
-            <x-ui-input-checkbox wire:model.live="is_active" checked-label="Active" unchecked-label="Inactive" />
+            <x-ui-input-checkbox model="is_active" checked-label="Active" unchecked-label="Inactive" />
         </form>
 
         <x-slot name="footer">
