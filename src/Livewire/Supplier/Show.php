@@ -64,20 +64,11 @@ class Show extends Component
     }
 
     #[Computed]
-    public function supplierArticles()
-    {
-        return $this->supplier->supplierArticles()
-            ->with(['article'])
-            ->orderBy('created_at', 'desc')
-            ->get();
-    }
-
-    #[Computed]
     public function stats()
     {
         return [
-            'total_articles' => $this->supplier->supplierArticles()->count(),
-            'active_articles' => $this->supplier->supplierArticles()->where('is_active', true)->count(),
+            'total_articles' => 0, // Placeholder - wird später implementiert
+            'active_articles' => 0, // Placeholder - wird später implementiert
         ];
     }
 

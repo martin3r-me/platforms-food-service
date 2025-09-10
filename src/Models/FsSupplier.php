@@ -55,9 +55,5 @@ class FsSupplier extends Model
         return $query->where('team_id', $teamId);
     }
 
-    public function supplierArticles()
-    {
-        return $this->hasMany(FsSupplierArticle::class, 'supplier_id');
-    }
 
 }

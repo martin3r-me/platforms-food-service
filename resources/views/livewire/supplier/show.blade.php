@@ -78,57 +78,13 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Artikel</h3>
-                    @if($this->supplierArticles->count() > 0)
-                        <div class="overflow-x-auto">
-                            <table class="w-full table-auto border-collapse text-sm">
-                                <thead class="bg-gray-50">
-                                    <tr class="text-left text-gray-500 border-b border-gray-200 text-xs uppercase tracking-wide">
-                                        <th class="px-6 py-3">Artikel</th>
-                                        <th class="px-6 py-3">EAN</th>
-                                        <th class="px-6 py-3">Preis</th>
-                                        <th class="px-6 py-3">Status</th>
-                                        <th class="px-6 py-3">Erstellt</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200">
-                                    @foreach($this->supplierArticles as $supplierArticle)
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4">
-                                                <div class="font-medium text-gray-900">
-                                                    {{ $supplierArticle->article->name ?? 'Unbekannt' }}
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4 text-sm text-gray-500">
-                                                {{ $supplierArticle->ean ?? '–' }}
-                                            </td>
-                                            <td class="px-6 py-4 text-sm text-gray-500">
-                                                {{ $supplierArticle->price ? number_format($supplierArticle->price, 2) . ' €' : '–' }}
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <x-ui-badge 
-                                                    variant="{{ $supplierArticle->is_active ? 'success' : 'secondary' }}" 
-                                                    size="sm"
-                                                >
-                                                    {{ $supplierArticle->is_active ? 'Aktiv' : 'Inaktiv' }}
-                                                </x-ui-badge>
-                                            </td>
-                                            <td class="px-6 py-4 text-sm text-gray-500">
-                                                {{ $supplierArticle->created_at->format('d.m.Y') }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                    <div class="text-center py-8 text-gray-500">
+                        <div class="d-flex flex-col items-center">
+                            @svg('heroicon-o-cube', 'w-12 h-12 text-gray-300 mb-4')
+                            <p class="text-lg font-medium mb-2">Keine Artikel vorhanden</p>
+                            <p class="text-sm">Artikel-Funktionalität wird später implementiert.</p>
                         </div>
-                    @else
-                        <div class="text-center py-8 text-gray-500">
-                            <div class="d-flex flex-col items-center">
-                                @svg('heroicon-o-cube', 'w-12 h-12 text-gray-300 mb-4')
-                                <p class="text-lg font-medium mb-2">Keine Artikel vorhanden</p>
-                                <p class="text-sm">Fügen Sie Artikel zu diesem Lieferanten hinzu.</p>
-                            </div>
-                        </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>
