@@ -96,7 +96,7 @@
             <div x-show="open" class="p-2 max-h-xs overflow-y-auto">
                 <livewire:activity-log.index
                     :model="$brand"
-                    :key="get_class($brand) . '_' . $brand->id"
+                    :key="'brand_' . $brand->id"
                 />
             </div>
         </div>
