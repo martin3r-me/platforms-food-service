@@ -53,7 +53,7 @@ class Index extends Component
             ->orderBy('name')
             ->get();
 
-        return view('food-service::livewire.attribute.index', [
+        return view('foodservice::livewire.attribute.index', [
             'items' => $items,
         ])->layout('platform::layouts.app');
     }

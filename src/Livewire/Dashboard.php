@@ -8,7 +8,7 @@ class Dashboard extends Component
 {
     public function render()
     {
-        return view('food-service::livewire.dashboard')
+        return view('foodservice::livewire.dashboard')
             ->layout('platform::layouts.app');
     }
 }

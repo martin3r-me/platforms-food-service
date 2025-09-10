@@ -42,12 +42,12 @@ class Attribute extends Component
     public function deleteItem(): void
     {
         $this->attribute->delete();
-        $this->redirectRoute('food-service.attributes.index');
+        $this->redirectRoute('foodservice.attributes.index');
     }
 
     public function render()
     {
-        return view('food-service::livewire.attribute.attribute', [
+        return view('foodservice::livewire.attribute.attribute', [
             'attribute' => $this->attribute,
         ])->layout('platform::layouts.app');
     }

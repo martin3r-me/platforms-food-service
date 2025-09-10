@@ -42,12 +42,12 @@ class Additive extends Component
     public function deleteItem(): void
     {
         $this->additive->delete();
-        $this->redirectRoute('food-service.additives.index');
+        $this->redirectRoute('foodservice.additives.index');
     }
 
     public function render()
     {
-        return view('food-service::livewire.additive.additive', [
+        return view('foodservice::livewire.additive.additive', [
             'additive' => $this->additive,
         ])->layout('platform::layouts.app');
     }

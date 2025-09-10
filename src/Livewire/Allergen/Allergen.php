@@ -42,12 +42,12 @@ class Allergen extends Component
     public function deleteItem(): void
     {
         $this->allergen->delete();
-        $this->redirectRoute('food-service.allergens.index');
+        $this->redirectRoute('foodservice.allergens.index');
     }
 
     public function render()
     {
-        return view('food-service::livewire.allergen.allergen', [
+        return view('foodservice::livewire.allergen.allergen', [
             'allergen' => $this->allergen,
         ])->layout('platform::layouts.app');
     }
