@@ -14,6 +14,7 @@ class Index extends Component
     public bool $is_active = true;
     public ?int $cluster_id = null;
     public ?int $parent_id = null;
+    public ?int $selectedParentId = null;
 
     protected function rules(): array
     {
@@ -26,16 +27,26 @@ class Index extends Component
         ];
     }
 
-    public function openCreateModal(): void
+    public function openCreateModal(?int $parentId = null): void
     {
         $this->resetValidation();
         $this->reset(['name', 'description', 'is_active', 'cluster_id', 'parent_id']);
         $this->is_active = true;
+        $this->selectedParentId = $parentId;
         
-        // Wenn nur ein Cluster existiert, automatisch vorauswählen
-        $clusters = FsArticleCluster::orderBy('name')->get();
-        if ($clusters->count() === 1) {
-            $this->cluster_id = $clusters->first()->id;
+        if ($parentId) {
+            // Parent ausgewählt - Cluster und Parent setzen
+            $parent = FsArticleCategory::find($parentId);
+            if ($parent) {
+                $this->cluster_id = $parent->cluster_id;
+                $this->parent_id = $parentId;
+            }
+        } else {
+            // Neuer Parent - Cluster automatisch vorauswählen wenn nur eins existiert
+            $clusters = FsArticleCluster::orderBy('name')->get();
+            if ($clusters->count() === 1) {
+                $this->cluster_id = $clusters->first()->id;
+            }
         }
         
         $this->modalShow = true;
@@ -79,13 +90,37 @@ class Index extends Component
         $this->closeCreateModal();
     }
 
+    public function getTreeItemsProperty()
+    {
+        $allItems = FsArticleCategory::with(['cluster','parent'])->orderBy('name')->get();
+        $tree = collect();
+        
+        // Erst alle Parents (ohne parent_id)
+        $parents = $allItems->whereNull('parent_id');
+        foreach ($parents as $parent) {
+            $tree->push($parent);
+            $this->addChildrenToTree($tree, $parent, $allItems, 1);
+        }
+        
+        return $tree;
+    }
+    
+    private function addChildrenToTree($tree, $parent, $allItems, $level)
+    {
+        $children = $allItems->where('parent_id', $parent->id);
+        foreach ($children as $child) {
+            $child->level = $level;
+            $tree->push($child);
+            $this->addChildrenToTree($tree, $child, $allItems, $level + 1);
+        }
+    }
+
     public function render()
     {
-        $items = FsArticleCategory::with(['cluster','parent'])->orderBy('name')->get();
         $clusters = FsArticleCluster::orderBy('name')->get();
 
         return view('foodservice::livewire.article-category.index', [
-            'items' => $items,
+            'items' => $this->treeItems,
             'clusters' => $clusters,
         ])->layout('platform::layouts.app');
     }
