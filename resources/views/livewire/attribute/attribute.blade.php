@@ -3,7 +3,7 @@
         <div class="border-top-1 border-bottom-1 border-muted border-top-solid border-bottom-solid p-2 flex-shrink-0">
             <div class="d-flex gap-1">
                 <div class="d-flex">
-                    <a href="{{ route('food-service.attributes.index') }}" class="d-flex px-3 border-right-solid border-right-1 border-right-muted underline" wire:navigate>
+                    <a href="{{ route('foodservice.attributes.index') }}" class="d-flex px-3 border-right-solid border-right-1 border-right-muted underline" wire:navigate>
                         Attributes
                     </a>
                 </div>

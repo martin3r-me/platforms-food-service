@@ -23,31 +23,31 @@ class FoodServiceServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Schritt 1: Config laden
-        $this->mergeConfigFrom(__DIR__.'/../config/food-service.php', 'food-service');
+        $this->mergeConfigFrom(__DIR__.'/../config/food-service.php', 'foodservice');
         
         // Schritt 2: Existenzprüfung (config jetzt verfügbar)
         if (
-            config()->has('food-service.routing') &&
-            config()->has('food-service.navigation') &&
+            config()->has('foodservice.routing') &&
+            config()->has('foodservice.navigation') &&
             Schema::hasTable('modules')
         ) {
             PlatformCore::registerModule([
-                'key'        => 'food-service',
+                'key'        => 'foodservice',
                 'title'      => 'Food Service',
-                'routing'    => config('food-service.routing'),
-                'guard'      => config('food-service.guard'),
-                'navigation' => config('food-service.navigation'),
-                'sidebar'    => config('food-service.sidebar'),
+                'routing'    => config('foodservice.routing'),
+                'guard'      => config('foodservice.guard'),
+                'navigation' => config('foodservice.navigation'),
+                'sidebar'    => config('foodservice.sidebar'),
             ]);
         }
 
         // Schritt 3: Wenn Modul registriert, Routes laden
-        if (PlatformCore::getModule('food-service')) {
-            ModuleRouter::group('food-service', function () {
+        if (PlatformCore::getModule('foodservice')) {
+            ModuleRouter::group('foodservice', function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/guest.php');
             }, requireAuth: false);
 
-            ModuleRouter::group('food-service', function () {
+            ModuleRouter::group('foodservice', function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
             });
         }
@@ -61,7 +61,7 @@ class FoodServiceServiceProvider extends ServiceProvider
         ], 'config');
 
         // Schritt 6: Views & Livewire
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'food-service');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'foodservice');
         $this->registerLivewireComponents();
     }
 
@@ -69,7 +69,7 @@ class FoodServiceServiceProvider extends ServiceProvider
     {
         $basePath = __DIR__ . '/Livewire';
         $baseNamespace = 'Platform\\FoodService\\Livewire';
-        $prefix = 'food-service';
+        $prefix = 'foodservice';
 
         if (!is_dir($basePath)) {
             return;

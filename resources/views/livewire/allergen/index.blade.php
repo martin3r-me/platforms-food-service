@@ -6,7 +6,7 @@
 
     <div class="space-y-2">
         @foreach($items as $item)
-            <a href="{{ route('food-service.allergens.show', ['allergen' => $item]) }}"
+            <a href="{{ route('foodservice.allergens.show', ['allergen' => $item]) }}"
                class="block p-2 rounded hover:bg-primary-10" wire:navigate>
                 {{ $item->name }}
             </a>

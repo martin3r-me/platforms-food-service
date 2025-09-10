@@ -2,7 +2,7 @@
     <div>
         <h4 x-show="!collapsed" class="p-3 text-sm italic text-secondary uppercase">General</h4>
 
-        <a href="{{ route('food-service.dashboard') }}"
+        <a href="{{ route('foodservice.dashboard') }}"
            class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
            :class="[
                window.location.pathname.endsWith('/food-service') || 
@@ -16,7 +16,7 @@
             <span x-show="!collapsed" class="truncate">Dashboard</span>
         </a>
 
-        <a href="{{ route('food-service.allergens.index') }}"
+        <a href="{{ route('foodservice.allergens.index') }}"
            class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
            :class="[
                window.location.pathname.includes('/allergens')
@@ -29,7 +29,7 @@
             <span x-show="!collapsed" class="truncate">Allergens</span>
         </a>
 
-        <a href="{{ route('food-service.additives.index') }}"
+        <a href="{{ route('foodservice.additives.index') }}"
            class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
            :class="[
                window.location.pathname.includes('/additives')
@@ -42,7 +42,7 @@
             <span x-show="!collapsed" class="truncate">Additives</span>
         </a>
 
-        <a href="{{ route('food-service.attributes.index') }}"
+        <a href="{{ route('foodservice.attributes.index') }}"
            class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
            :class="[
                window.location.pathname.includes('/attributes')

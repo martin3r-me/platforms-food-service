@@ -4,14 +4,14 @@ return [
     'routing' => [
         // analog zu crm: mode/prefix werden vom ModuleRouter ausgewertet
         'mode' => env('FOODSERVICE_MODE', 'subdomain'),
-        'prefix' => 'food-service',
+        'prefix' => 'foodservice',
     ],
 
     'guard' => 'web',
 
     // Haupteintrag in der Modul-Navigation
     'navigation' => [
-        'route' => 'food-service.dashboard',
+        'route' => 'foodservice.dashboard',
         'icon'  => 'heroicon-o-cake',
         'order' => 40,
     ],
