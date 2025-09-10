@@ -239,8 +239,13 @@ class Show extends Component
             'total_allergens' => $this->article->allergens->count(),
             'total_additives' => $this->article->additives->count(),
             'total_attributes' => $this->article->attributes->count(),
+            'total_suppliers' => $this->article->supplierArticles->count(),
         ];
     }
+
+    protected $listeners = [
+        'supplierArticleUpdated' => '$refresh',
+    ];
 
     public function render()
     {

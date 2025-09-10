@@ -113,4 +113,20 @@ class FsArticle extends Model
         return $this->belongsToMany(FsAttribute::class, 'fs_article_attributes', 'article_id', 'attribute_id')
             ->withTimestamps();
     }
+
+    /**
+     * Get the supplier articles for the article.
+     */
+    public function supplierArticles()
+    {
+        return $this->hasMany(FsSupplierArticle::class);
+    }
+
+    /**
+     * Get the suppliers for the article through supplier articles.
+     */
+    public function suppliers()
+    {
+        return $this->hasManyThrough(FsSupplier::class, FsSupplierArticle::class, 'article_id', 'id', 'id', 'supplier_id');
+    }
 }

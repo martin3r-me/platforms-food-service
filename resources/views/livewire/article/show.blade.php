@@ -32,7 +32,7 @@
             <!-- Statistiken -->
             <div class="mb-6">
                 <h3 class="text-lg font-semibold mb-4 text-secondary">Statistiken</h3>
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-4 gap-4">
                     <x-ui-dashboard-tile
                         title="Allergene"
                         :count="$this->stats['total_allergens']"
@@ -54,6 +54,14 @@
                         :count="$this->stats['total_attributes']"
                         icon="tag"
                         variant="primary"
+                        size="sm"
+                    />
+
+                    <x-ui-dashboard-tile
+                        title="Lieferanten"
+                        :count="$this->stats['total_suppliers']"
+                        icon="truck"
+                        variant="success"
                         size="sm"
                     />
                 </div>
@@ -238,6 +246,90 @@
                         @endif
                     </div>
                 </div>
+            </div>
+
+            <!-- Lieferanten -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-4 text-secondary">Lieferanten</h3>
+                <div class="d-flex items-center justify-between mb-4">
+                    <p class="text-sm text-gray-600">Verwalte die Lieferanten für diesen Artikel</p>
+                    <x-ui-button variant="primary" size="sm" wire:click="$dispatch('openSupplierModal')">
+                        @svg('heroicon-o-plus', 'w-4 h-4 mr-1')
+                        Neuer Lieferant
+                    </x-ui-button>
+                </div>
+                
+                @if($article->supplierArticles->count() > 0)
+                    <x-ui-table>
+                        <x-slot name="header">
+                            <x-ui-table-header>Lieferant</x-ui-table-header>
+                            <x-ui-table-header>Artikel-Nr</x-ui-table-header>
+                            <x-ui-table-header>EAN</x-ui-table-header>
+                            <x-ui-table-header>Einkaufspreis</x-ui-table-header>
+                            <x-ui-table-header>Lieferzeit</x-ui-table-header>
+                            <x-ui-table-header>Status</x-ui-table-header>
+                            <x-ui-table-header>Aktionen</x-ui-table-header>
+                        </x-slot>
+                        
+                        @foreach($article->supplierArticles as $supplierArticle)
+                            <x-ui-table-row>
+                                <x-ui-table-cell>
+                                    <div class="d-flex items-center gap-2">
+                                        @svg('heroicon-o-truck', 'w-4 h-4 text-gray-400')
+                                        {{ $supplierArticle->supplier->name }}
+                                    </div>
+                                </x-ui-table-cell>
+                                <x-ui-table-cell>
+                                    {{ $supplierArticle->supplier_article_number ?: '–' }}
+                                </x-ui-table-cell>
+                                <x-ui-table-cell>
+                                    {{ $supplierArticle->supplier_ean ?: '–' }}
+                                </x-ui-table-cell>
+                                <x-ui-table-cell>
+                                    @if($supplierArticle->purchase_price)
+                                        {{ number_format($supplierArticle->purchase_price, 2) }} {{ $supplierArticle->currency }}
+                                    @else
+                                        –
+                                    @endif
+                                </x-ui-table-cell>
+                                <x-ui-table-cell>
+                                    @if($supplierArticle->delivery_time_days)
+                                        {{ $supplierArticle->delivery_time_days }} Tage
+                                    @else
+                                        –
+                                    @endif
+                                </x-ui-table-cell>
+                                <x-ui-table-cell>
+                                    <x-ui-badge :variant="$supplierArticle->is_active ? 'success' : 'secondary'" size="sm">
+                                        {{ $supplierArticle->is_active ? 'Aktiv' : 'Inaktiv' }}
+                                    </x-ui-badge>
+                                </x-ui-table-cell>
+                                <x-ui-table-cell>
+                                    <div class="d-flex gap-1">
+                                        <x-ui-button variant="secondary" size="sm" wire:click="$dispatch('openSupplierModal', { supplierArticle: {{ $supplierArticle->id }} })">
+                                            @svg('heroicon-o-pencil', 'w-4 h-4')
+                                        </x-ui-button>
+                                        <x-ui-confirm-button 
+                                            action="deleteSupplierArticle" 
+                                            :params="['supplierArticle' => $supplierArticle->id]"
+                                            text="" 
+                                            confirmText="Wirklich löschen?" 
+                                            variant="danger-outline"
+                                            size="sm"
+                                            :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
+                                        />
+                                    </div>
+                                </x-ui-table-cell>
+                            </x-ui-table-row>
+                        @endforeach
+                    </x-ui-table>
+                @else
+                    <div class="text-center py-8 text-gray-500">
+                        <x-heroicon-o-truck class="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                        <p>Keine Lieferanten zugeordnet</p>
+                        <p class="text-sm">Klicke auf "Neuer Lieferant" um den ersten Lieferanten hinzuzufügen</p>
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -447,4 +539,7 @@
             </div>
         </x-slot>
     </x-ui-modal>
+
+    <!-- Supplier Modal -->
+    <livewire:article.supplier-modal :article="$article" />
 </div>

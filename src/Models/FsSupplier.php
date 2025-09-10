@@ -3,6 +3,7 @@
 namespace Platform\FoodService\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Platform\ActivityLog\Traits\LogsActivity;
 use Symfony\Component\Uid\UuidV7;
@@ -55,5 +56,19 @@ class FsSupplier extends Model
         return $query->where('team_id', $teamId);
     }
 
+    /**
+     * Get the supplier articles for the supplier.
+     */
+    public function supplierArticles(): HasMany
+    {
+        return $this->hasMany(FsSupplierArticle::class);
+    }
 
+    /**
+     * Get the articles for the supplier through supplier articles.
+     */
+    public function articles(): HasMany
+    {
+        return $this->hasManyThrough(FsArticle::class, FsSupplierArticle::class, 'supplier_id', 'id', 'id', 'article_id');
+    }
 }
