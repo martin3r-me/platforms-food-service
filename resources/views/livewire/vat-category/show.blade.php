@@ -97,6 +97,18 @@
                 block="true"
             />
 
+            <hr>
+
+            <div class="mt-3">
+                <x-ui-confirm-button 
+                    action="deleteCategory"
+                    text="Delete Category" 
+                    confirmText="Wirklich löschen?" 
+                    variant="danger-outline"
+                    :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
+                />
+            </div>
+
         </div>
     </div>
 
