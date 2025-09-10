@@ -38,7 +38,7 @@ class Index extends Component
     protected $rules = [
         'name' => 'required|string|max:255',
         'description' => 'nullable|string',
-        'article_number' => 'required|string|max:255|unique:fs_articles,article_number',
+        'article_number' => 'nullable|string|max:255|unique:fs_articles,article_number',
         'ean' => 'nullable|string|max:255',
         'brand_id' => 'nullable|exists:fs_brands,id',
         'manufacturer_id' => 'nullable|exists:fs_manufacturers,id',

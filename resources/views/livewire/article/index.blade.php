@@ -179,7 +179,6 @@
                     name="article_number"
                     label="Artikel-Nummer"
                     wire:model.live="article_number"
-                    required
                     placeholder="z.B. ART-001"
                 />
             </div>

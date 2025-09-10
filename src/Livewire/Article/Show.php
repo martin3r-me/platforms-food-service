@@ -53,7 +53,7 @@ class Show extends Component
     {
         return [
             'article.name' => 'required|string|max:255',
-            'article.article_number' => 'required|string|max:255|unique:fs_articles,article_number,' . $this->article->id,
+            'article.article_number' => 'nullable|string|max:255|unique:fs_articles,article_number,' . $this->article->id,
             'article.ean' => 'nullable|string|max:255',
             'settingsForm.description' => 'nullable|string',
             'settingsForm.is_active' => 'boolean',
@@ -66,6 +66,15 @@ class Show extends Component
         $this->article->save();
 
         session()->flash('message', 'Artikel erfolgreich aktualisiert.');
+    }
+
+    public function deleteItem(): void
+    {
+        $this->article->delete();
+        
+        session()->flash('message', 'Artikel erfolgreich gelöscht.');
+        
+        return redirect()->route('foodservice.articles.index');
     }
 
     public function saveSettings(): void
