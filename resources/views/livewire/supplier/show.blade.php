@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center">
             <div>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    {{ optional($supplier->crmCompanyLinks->first()?->company)->name ?? optional($supplier->crmContactLinks->first()?->contact)->name ?? 'Lieferant' }}
+                    {{ optional($supplier->companyLinks->first()?->company)->name ?? optional($supplier->contactLinks->first()?->contact)->name ?? 'Lieferant' }}
                 </h2>
                 <p class="text-sm text-gray-600 mt-1">Lieferanten-Nr.: {{ $supplier->supplier_number }}</p>
             </div>
@@ -48,8 +48,8 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 text-gray-900">
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Unternehmen</h3>
-                            @if($supplier->crmCompanyLinks->count() > 0)
-                                @foreach($supplier->crmCompanyLinks as $companyLink)
+                            @if($supplier->companyLinks->count() > 0)
+                                @foreach($supplier->companyLinks as $companyLink)
                                     <div class="mb-4 p-4 border border-gray-200 rounded-lg">
                                         <div class="d-flex items-center mb-2">
                                             @svg('heroicon-o-building-office', 'w-5 h-5 text-gray-400 mr-3')
@@ -77,8 +77,8 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 text-gray-900">
                             <h3 class="text-lg font-medium text-gray-900 mb-4">Kontakt</h3>
-                            @if($supplier->crmContactLinks->count() > 0)
-                                @foreach($supplier->crmContactLinks as $contactLink)
+                            @if($supplier->contactLinks->count() > 0)
+                                @foreach($supplier->contactLinks as $contactLink)
                                     <div class="mb-4 p-4 border border-gray-200 rounded-lg">
                                         <div class="d-flex items-center mb-2">
                                             @svg('heroicon-o-user', 'w-5 h-5 text-gray-400 mr-3')

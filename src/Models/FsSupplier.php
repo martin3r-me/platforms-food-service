@@ -5,13 +5,13 @@ namespace Platform\FoodService\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Platform\ActivityLog\Traits\LogsActivity;
-use Platform\Crm\Traits\HasCrmContactLinks;
-use Platform\Crm\Traits\HasCrmCompanyLinks;
+use Platform\Crm\Traits\HasContactLinksTrait;
+use Platform\Crm\Traits\HasCompanyLinksTrait;
 use Symfony\Component\Uid\UuidV7;
 
 class FsSupplier extends Model
 {
-    use SoftDeletes, LogsActivity, HasCrmContactLinks, HasCrmCompanyLinks;
+    use SoftDeletes, LogsActivity, HasContactLinksTrait, HasCompanyLinksTrait;
     
     protected $table = 'fs_suppliers';
 

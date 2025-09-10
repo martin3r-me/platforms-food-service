@@ -35,7 +35,7 @@ class Index extends Component
     #[Computed]
     public function suppliers()
     {
-        $query = FsSupplier::with(['crmContactLinks.contact', 'crmCompanyLinks.company'])
+        $query = FsSupplier::with(['contactLinks.contact', 'companyLinks.company'])
             ->forTeam(auth()->user()->currentTeam->id);
 
         if ($this->sortField === 'supplier_number') {
@@ -53,7 +53,7 @@ class Index extends Component
         // Aktive CRM Companies aus dem Team, die noch nicht mit einem Supplier verknüpft sind
         $linkedIds = \Platform\Crm\Models\CrmCompanyLink::where('linkable_type', 'Platform\\FoodService\\Models\\FsSupplier')
             ->where('team_id', auth()->user()->currentTeam->id)
-            ->pluck('crm_company_id');
+            ->pluck('company_id');
 
         return CrmCompany::where('team_id', auth()->user()->currentTeam->id)
             ->where('is_active', true)
@@ -68,7 +68,7 @@ class Index extends Component
         // Aktive CRM Contacts aus dem Team, die noch nicht mit einem Supplier verknüpft sind
         $linkedIds = \Platform\Crm\Models\CrmContactLink::where('linkable_type', 'Platform\\FoodService\\Models\\FsSupplier')
             ->where('team_id', auth()->user()->currentTeam->id)
-            ->pluck('crm_contact_id');
+            ->pluck('contact_id');
 
         return CrmContact::where('team_id', auth()->user()->currentTeam->id)
             ->where('is_active', true)
@@ -112,7 +112,7 @@ class Index extends Component
         if ($this->crm_company_id) {
             $company = CrmCompany::find($this->crm_company_id);
             if ($company) {
-                $supplier->attachCrmCompany($company);
+                $supplier->attachCompany($company);
             }
         }
 
@@ -120,7 +120,7 @@ class Index extends Component
         if ($this->crm_contact_id) {
             $contact = CrmContact::find($this->crm_contact_id);
             if ($contact) {
-                $supplier->attachCrmContact($contact);
+                $supplier->attachContact($contact);
             }
         }
 

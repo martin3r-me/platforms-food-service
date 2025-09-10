@@ -80,7 +80,7 @@
                                         @svg('heroicon-o-building-office', 'w-5 h-5 text-gray-400 mr-3')
                                         <div>
                                             <div class="font-medium text-gray-900">
-                                                {{ optional($supplier->crmCompanyLinks->first()?->company)->name ?? 'Kein Unternehmen verknüpft' }}
+                                                {{ optional($supplier->companyLinks->first()?->company)->name ?? 'Kein Unternehmen verknüpft' }}
                                             </div>
                                         </div>
                                     </div>
@@ -90,7 +90,7 @@
                                         @svg('heroicon-o-user', 'w-5 h-5 text-gray-400 mr-3')
                                         <div>
                                             <div class="font-medium text-gray-900">
-                                                {{ optional($supplier->crmContactLinks->first()?->contact)->name ?? 'Kein Kontakt verknüpft' }}
+                                                {{ optional($supplier->contactLinks->first()?->contact)->name ?? 'Kein Kontakt verknüpft' }}
                                             </div>
                                         </div>
                                     </div>
