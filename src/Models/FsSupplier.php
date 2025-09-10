@@ -5,13 +5,9 @@ namespace Platform\FoodService\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Platform\ActivityLog\Traits\LogsActivity;
-use Platform\Crm\Contracts\CompanyLinkableInterface;
-use Platform\Crm\Models\CrmCompany;
-use Platform\Crm\Models\CrmCompanyLink;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Symfony\Component\Uid\UuidV7;
 
-class FsSupplier extends Model implements CompanyLinkableInterface
+class FsSupplier extends Model
 {
     use SoftDeletes, LogsActivity;
     
@@ -19,7 +15,7 @@ class FsSupplier extends Model implements CompanyLinkableInterface
 
     protected $fillable = [
         'uuid',
-        'supplier_number',
+        'name',
         'description',
         'is_active',
         'team_id',
@@ -64,68 +60,4 @@ class FsSupplier extends Model implements CompanyLinkableInterface
         return $this->hasMany(FsSupplierArticle::class, 'supplier_id');
     }
 
-    // CRM Company Links - Direkte Implementierung
-    public function companyLinks(): MorphMany
-    {
-        return $this->morphMany(CrmCompanyLink::class, 'linkable')
-            ->forCurrentTeam();
-    }
-
-    public function companies()
-    {
-        return $this->companyLinks()
-            ->with('company')
-            ->get()
-            ->pluck('company')
-            ->filter(function ($company) {
-                return $company && $company->is_active;
-            });
-    }
-
-    public function attachCompany(CrmCompany $company): bool
-    {
-        if (!$company->is_active) {
-            return false;
-        }
-
-        if (! $this->hasCompany($company)) {
-            $this->companyLinks()->create([
-                'company_id' => $company->id,
-                'team_id' => auth()->user()->current_team_id,
-                'created_by_user_id' => auth()->id(),
-            ]);
-            return true;
-        }
-        return false;
-    }
-
-    public function hasCompany(CrmCompany $company): bool
-    {
-        return $this->companyLinks()
-            ->where('company_id', $company->id)
-            ->exists();
-    }
-
-    // CompanyLinkableInterface Implementation
-    public function getCompanyLinkableId(): int
-    {
-        return $this->id;
-    }
-
-    public function getCompanyLinkableType(): string
-    {
-        return 'Platform\\FoodService\\Models\\FsSupplier';
-    }
-
-    public function getCompanyIdentifiers(): array
-    {
-        // Für Suppliers haben wir keine direkten Company-Identifikatoren
-        // Diese könnten aus den verknüpften Companies kommen
-        return [];
-    }
-
-    public function getTeamId(): int
-    {
-        return $this->team_id;
-    }
 }

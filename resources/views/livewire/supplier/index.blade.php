@@ -48,9 +48,9 @@
                     <thead class="bg-gray-50">
                         <tr class="text-left text-gray-500 border-b border-gray-200 text-xs uppercase tracking-wide">
                             <th class="px-6 py-3">
-                                <button wire:click="sortBy('supplier_number')" class="d-flex items-center gap-1 hover:text-gray-700">
-                                    Lieferanten-Nr.
-                                    @if($sortField === 'supplier_number')
+                                <button wire:click="sortBy('name')" class="d-flex items-center gap-1 hover:text-gray-700">
+                                    Name
+                                    @if($sortField === 'name')
                                         @if($sortDirection === 'asc')
                                             @svg('heroicon-o-chevron-up', 'w-4 h-4')
                                         @else
@@ -59,7 +59,7 @@
                                     @endif
                                 </button>
                             </th>
-                            <th class="px-6 py-3">Unternehmen</th>
+                            <th class="px-6 py-3">Beschreibung</th>
                             <th class="px-6 py-3">Status</th>
                             <th class="px-6 py-3">Erstellt</th>
                             <th class="px-6 py-3 text-right">Aktionen</th>
@@ -71,17 +71,12 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4">
                                     <div class="font-medium text-gray-900">
-                                        {{ $supplier->supplier_number }}
+                                        {{ $supplier->name }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div class="d-flex items-center">
-                                        @svg('heroicon-o-building-office', 'w-5 h-5 text-gray-400 mr-3')
-                                        <div>
-                                            <div class="font-medium text-gray-900">
-                                                {{ optional($supplier->companyLinks->first()?->company)->name ?? 'Kein Unternehmen verknüpft' }}
-                                            </div>
-                                        </div>
+                                    <div class="text-sm text-gray-600">
+                                        {{ $supplier->description ?? 'Keine Beschreibung' }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -137,11 +132,11 @@
         <form wire:submit.prevent="createSupplier" class="space-y-6">
             <div class="grid grid-cols-2 gap-4">
                 <x-ui-input-text 
-                    name="supplier_number" 
-                    label="Lieferanten-Nummer" 
-                    wire:model.live="supplier_number" 
+                    name="name" 
+                    label="Name" 
+                    wire:model.live="name" 
                     required 
-                    placeholder="z.B. L001"
+                    placeholder="z.B. Metro AG"
                 />
                 <x-ui-input-checkbox 
                     model="is_active" 
@@ -157,19 +152,6 @@
                 rows="3"
                 placeholder="Optionale Beschreibung des Lieferanten"
             />
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Unternehmen (optional)</label>
-                <x-ui-input-select
-                    name="crm_company_id"
-                    :options="$this->availableCompanies"
-                    optionValue="id"
-                    optionLabel="name"
-                    :nullable="true"
-                    nullLabel="– Kein Unternehmen –"
-                    wire:model.live="crm_company_id"
-                />
-            </div>
         </form>
 
         <x-slot name="footer">

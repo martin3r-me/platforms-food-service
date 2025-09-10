@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('fs_suppliers', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('supplier_number')->unique();
+            $table->string('name');
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();

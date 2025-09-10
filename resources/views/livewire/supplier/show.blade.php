@@ -3,9 +3,9 @@
         <div class="flex justify-between items-center">
             <div>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    {{ optional($supplier->companyLinks->first()?->company)->name ?? 'Lieferant' }}
+                    {{ $supplier->name }}
                 </h2>
-                <p class="text-sm text-gray-600 mt-1">Lieferanten-Nr.: {{ $supplier->supplier_number }}</p>
+                <p class="text-sm text-gray-600 mt-1">Lieferant</p>
             </div>
             <div class="d-flex items-center gap-2">
                 <x-ui-button variant="secondary" wire:click="$set('settingsModalShow', true)">
@@ -43,31 +43,32 @@
 
             <!-- Lieferanten Details -->
             <div class="grid grid-cols-1 gap-6 mb-6">
-                <!-- Unternehmen Information -->
+                <!-- Lieferanten Information -->
                 <div>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 text-gray-900">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Unternehmen</h3>
-                            @if($supplier->companyLinks->count() > 0)
-                                @foreach($supplier->companyLinks as $companyLink)
-                                    <div class="mb-4 p-4 border border-gray-200 rounded-lg">
-                                        <div class="d-flex items-center mb-2">
-                                            @svg('heroicon-o-building-office', 'w-5 h-5 text-gray-400 mr-3')
-                                            <h4 class="font-medium text-gray-900">{{ $companyLink->company->name }}</h4>
-                                        </div>
-                                        @if($companyLink->company->description)
-                                            <p class="text-sm text-gray-600 mb-2">{{ $companyLink->company->description }}</p>
-                                        @endif
-                                        <div class="text-xs text-gray-500">
-                                            <p>Erstellt: {{ $companyLink->company->created_at->format('d.m.Y H:i') }}</p>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="text-center py-8 text-gray-500">
-                                    <p>Kein Unternehmen verknüpft</p>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Informationen</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                    <p class="text-sm text-gray-900">{{ $supplier->name }}</p>
                                 </div>
-                            @endif
+                                @if($supplier->description)
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Beschreibung</label>
+                                        <p class="text-sm text-gray-900">{{ $supplier->description }}</p>
+                                    </div>
+                                @endif
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                                    <x-ui-badge 
+                                        variant="{{ $supplier->is_active ? 'success' : 'secondary' }}" 
+                                        size="sm"
+                                    >
+                                        {{ $supplier->is_active ? 'Aktiv' : 'Inaktiv' }}
+                                    </x-ui-badge>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -144,9 +145,9 @@
 
         <form wire:submit.prevent="saveSettings" class="space-y-6">
             <x-ui-input-text 
-                name="supplier.supplier_number" 
-                label="Lieferanten-Nummer" 
-                wire:model.live="supplier.supplier_number" 
+                name="supplier.name" 
+                label="Name" 
+                wire:model.live="supplier.name" 
                 required 
             />
 

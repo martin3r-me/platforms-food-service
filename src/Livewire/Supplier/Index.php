@@ -5,8 +5,6 @@ namespace Platform\FoodService\Livewire\Supplier;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use Platform\FoodService\Models\FsSupplier;
-use Platform\Crm\Models\CrmCompany;
-use Platform\Crm\Contracts\CompanyLinkableInterface;
 
 class Index extends Component
 {
@@ -14,18 +12,16 @@ class Index extends Component
     public $modalShow = false;
     
     // Sorting
-    public $sortField = 'supplier_number';
+    public $sortField = 'name';
     public $sortDirection = 'asc';
     
     // Form Data
-    public $supplier_number = '';
-    public $crm_company_id = '';
+    public $name = '';
     public $description = '';
     public $is_active = true;
 
     protected $rules = [
-        'supplier_number' => 'required|string|max:255|unique:fs_suppliers,supplier_number',
-        'crm_company_id' => 'nullable|exists:crm_companies,id',
+        'name' => 'required|string|max:255',
         'description' => 'nullable|string',
         'is_active' => 'boolean',
     ];
@@ -33,11 +29,10 @@ class Index extends Component
     #[Computed]
     public function suppliers()
     {
-        $query = FsSupplier::with(['companyLinks.company'])
-            ->forTeam(auth()->user()->currentTeam->id);
+        $query = FsSupplier::forTeam(auth()->user()->currentTeam->id);
 
-        if ($this->sortField === 'supplier_number') {
-            $query->orderBy('supplier_number', $this->sortDirection);
+        if ($this->sortField === 'name') {
+            $query->orderBy('name', $this->sortDirection);
         } else {
             $query->orderBy($this->sortField, $this->sortDirection);
         }
@@ -45,20 +40,6 @@ class Index extends Component
         return $query->get();
     }
 
-    #[Computed]
-    public function availableCompanies()
-    {
-        // Aktive CRM Companies aus dem Team, die noch nicht mit einem Supplier verknüpft sind
-        $linkedIds = \Platform\Crm\Models\CrmCompanyLink::where('linkable_type', 'Platform\\FoodService\\Models\\FsSupplier')
-            ->where('team_id', auth()->user()->currentTeam->id)
-            ->pluck('company_id');
-
-        return CrmCompany::where('team_id', auth()->user()->currentTeam->id)
-            ->where('is_active', true)
-            ->whereNotIn('id', $linkedIds)
-            ->orderBy('name')
-            ->get();
-    }
 
 
     #[Computed]
@@ -84,21 +65,13 @@ class Index extends Component
         $this->validate();
         
         $supplier = FsSupplier::create([
-            'supplier_number' => $this->supplier_number,
+            'name' => $this->name,
             'description' => $this->description,
             'is_active' => $this->is_active,
             'team_id' => auth()->user()->currentTeam->id,
             'created_by_user_id' => auth()->id(),
             'owned_by_user_id' => auth()->id(),
         ]);
-
-        // Verknüpfe mit CRM Company
-        if ($this->crm_company_id) {
-            $company = CrmCompany::find($this->crm_company_id);
-            if ($company) {
-                $supplier->attachCompany($company);
-            }
-        }
 
         $this->resetForm();
         $this->modalShow = false;
@@ -109,8 +82,7 @@ class Index extends Component
     public function resetForm()
     {
         $this->reset([
-            'supplier_number', 
-            'crm_company_id',
+            'name', 
             'description', 
             'is_active'
         ]);

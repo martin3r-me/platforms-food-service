@@ -21,7 +21,7 @@ class Show extends Component
 
     public function mount(FsSupplier $supplier)
     {
-        $this->supplier = $supplier->load(['companyLinks.company']);
+        $this->supplier = $supplier;
         
         // Settings Form initialisieren
         $this->settingsForm = [
@@ -33,7 +33,7 @@ class Show extends Component
     public function rules(): array
     {
         return [
-            'supplier.supplier_number' => 'required|string|max:255|unique:fs_suppliers,supplier_number,' . $this->supplier->id,
+            'supplier.name' => 'required|string|max:255',
             'settingsForm.description' => 'nullable|string',
             'settingsForm.is_active' => 'boolean',
         ];
