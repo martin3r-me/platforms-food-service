@@ -16,6 +16,8 @@ use Platform\FoodService\Livewire\ArticleCategory\Index as ArticleCategoryIndex;
 use Platform\FoodService\Livewire\ArticleCategory\ArticleCategory as ArticleCategoryShow;
 use Platform\FoodService\Livewire\StorageType\Index as StorageTypeIndex;
 use Platform\FoodService\Livewire\StorageType\StorageType as StorageTypeShow;
+use Platform\FoodService\Livewire\BaseUnit\Index as BaseUnitIndex;
+use Platform\FoodService\Livewire\BaseUnit\BaseUnit as BaseUnitShow;
 
 Route::get('/', FoodServiceDashboard::class)->name('foodservice.dashboard');
 
@@ -46,6 +48,10 @@ Route::get('/article-categories/{category}', ArticleCategoryShow::class)->name('
 // Storage Types
 Route::get('/storage-types', StorageTypeIndex::class)->name('foodservice.storage-types.index');
 Route::get('/storage-types/{storageType}', StorageTypeShow::class)->name('foodservice.storage-types.show');
+
+// Base Units
+Route::get('/base-units', BaseUnitIndex::class)->name('foodservice.base-units.index');
+Route::get('/base-units/{baseUnit}', BaseUnitShow::class)->name('foodservice.base-units.show');
 
 
 
