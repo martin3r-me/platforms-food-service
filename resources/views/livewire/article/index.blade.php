@@ -1,23 +1,22 @@
 <div>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <div>
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    Artikel
-                </h2>
-                <p class="text-sm text-gray-600 mt-1">Verwalten Sie Ihre Artikel</p>
-            </div>
-            <div class="d-flex items-center gap-2">
-                <x-ui-button variant="primary" wire:click="openCreateModal">
-                    @svg('heroicon-o-plus', 'w-4 h-4 mr-2')
-                    Neuer Artikel
-                </x-ui-button>
-            </div>
-        </div>
-    </x-slot>
-
     <div class="py-8">
         <div class="max-w-full sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                        Artikel
+                    </h2>
+                    <p class="text-sm text-gray-600 mt-1">Verwalten Sie Ihre Artikel</p>
+                </div>
+                <div class="d-flex items-center gap-2">
+                    <x-ui-button variant="primary" wire:click="openCreateModal">
+                        @svg('heroicon-o-plus', 'w-4 h-4 mr-2')
+                        Neuer Artikel
+                    </x-ui-button>
+                </div>
+            </div>
+
             <!-- Statistiken -->
             <div class="grid grid-cols-3 gap-4 mb-6">
                 <x-ui-dashboard-tile
