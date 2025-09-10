@@ -1,6 +1,76 @@
 <div class="h-full overflow-y-auto p-6">
-    <div class="text-center">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4">Hallo Welt!</h1>
-        <p class="text-xl text-gray-600">Willkommen im Food Service-Modul</p>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold">Food Service</h1>
+        <p class="text-sm text-secondary">Übersicht</p>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+        <a href="{{ route('foodservice.allergens.index') }}" class="block p-4 rounded-lg border border-solid border-1 hover:border-primary hover:bg-primary-10 transition" wire:navigate>
+            <div class="text-sm text-muted">Allergens</div>
+            <div class="text-3xl font-semibold">{{ $counts['allergens']['total'] ?? 0 }}</div>
+            <div class="mt-2 text-xs text-secondary">Active: {{ $counts['allergens']['active'] ?? 0 }} · Inactive: {{ $counts['allergens']['inactive'] ?? 0 }}</div>
+        </a>
+
+        <a href="{{ route('foodservice.additives.index') }}" class="block p-4 rounded-lg border border-solid border-1 hover:border-primary hover:bg-primary-10 transition" wire:navigate>
+            <div class="text-sm text-muted">Additives</div>
+            <div class="text-3xl font-semibold">{{ $counts['additives']['total'] ?? 0 }}</div>
+            <div class="mt-2 text-xs text-secondary">Active: {{ $counts['additives']['active'] ?? 0 }} · Inactive: {{ $counts['additives']['inactive'] ?? 0 }}</div>
+        </a>
+
+        <a href="{{ route('foodservice.attributes.index') }}" class="block p-4 rounded-lg border border-solid border-1 hover:border-primary hover:bg-primary-10 transition" wire:navigate>
+            <div class="text-sm text-muted">Attributes</div>
+            <div class="text-3xl font-semibold">{{ $counts['attributes']['total'] ?? 0 }}</div>
+            <div class="mt-2 text-xs text-secondary">Active: {{ $counts['attributes']['active'] ?? 0 }} · Inactive: {{ $counts['attributes']['inactive'] ?? 0 }}</div>
+        </a>
+    </div>
+
+    <div class="mt-8 grid grid-cols-3 gap-4">
+        <div class="p-4 rounded-lg border border-solid border-1">
+            <div class="d-flex items-center justify-between mb-2">
+                <h3 class="font-semibold">Recent Allergens</h3>
+                <a href="{{ route('foodservice.allergens.index') }}" class="text-xs text-primary underline" wire:navigate>All</a>
+            </div>
+            <div class="space-y-1 text-sm">
+                @forelse(($recent['allergens'] ?? []) as $item)
+                    <a href="{{ route('foodservice.allergens.show', ['allergen' => $item]) }}" class="block hover:underline" wire:navigate>
+                        {{ $item->name }}
+                    </a>
+                @empty
+                    <div class="text-muted">– No entries –</div>
+                @endforelse
+            </div>
+        </div>
+
+        <div class="p-4 rounded-lg border border-solid border-1">
+            <div class="d-flex items-center justify-between mb-2">
+                <h3 class="font-semibold">Recent Additives</h3>
+                <a href="{{ route('foodservice.additives.index') }}" class="text-xs text-primary underline" wire:navigate>All</a>
+            </div>
+            <div class="space-y-1 text-sm">
+                @forelse(($recent['additives'] ?? []) as $item)
+                    <a href="{{ route('foodservice.additives.show', ['additive' => $item]) }}" class="block hover:underline" wire:navigate>
+                        {{ $item->name }}
+                    </a>
+                @empty
+                    <div class="text-muted">– No entries –</div>
+                @endforelse
+            </div>
+        </div>
+
+        <div class="p-4 rounded-lg border border-solid border-1">
+            <div class="d-flex items-center justify-between mb-2">
+                <h3 class="font-semibold">Recent Attributes</h3>
+                <a href="{{ route('foodservice.attributes.index') }}" class="text-xs text-primary underline" wire:navigate>All</a>
+            </div>
+            <div class="space-y-1 text-sm">
+                @forelse(($recent['attributes'] ?? []) as $item)
+                    <a href="{{ route('foodservice.attributes.show', ['attribute' => $item]) }}" class="block hover:underline" wire:navigate>
+                        {{ $item->name }}
+                    </a>
+                @empty
+                    <div class="text-muted">– No entries –</div>
+                @endforelse
+            </div>
+        </div>
     </div>
 </div>
