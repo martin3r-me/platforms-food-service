@@ -610,7 +610,7 @@
                     <x-ui-button
                         type="submit"
                         variant="primary"
-                        wire:click="saveSupplierArticle"
+                        wire:click="saveRelationships"
                     >
                         {{ $editingSupplierArticleId ? 'Aktualisieren' : 'Erstellen' }}
                     </x-ui-button>
