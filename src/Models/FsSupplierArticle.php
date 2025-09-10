@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Platform\Core\Traits\HasActivityLog;
-use Platform\Core\Traits\HasMultiTenant;
-use Platform\Core\Traits\HasUuid;
+use Platform\ActivityLog\Traits\LogsActivity;
+use Symfony\Component\Uid\UuidV7;
 
 class FsSupplierArticle extends Model
 {
-    use HasFactory, SoftDeletes, HasUuid, HasMultiTenant, HasActivityLog;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'supplier_id',
@@ -36,6 +35,19 @@ class FsSupplierArticle extends Model
         'minimum_order_quantity' => 'integer',
         'delivery_time_days' => 'integer',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $model) {
+            if (empty($model->uuid)) {
+                do {
+                    $uuid = UuidV7::generate();
+                } while (self::where('uuid', $uuid)->exists());
+
+                $model->uuid = $uuid;
+            }
+        });
+    }
 
     /**
      * Get the supplier that owns the supplier article.
