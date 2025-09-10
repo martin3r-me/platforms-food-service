@@ -100,7 +100,7 @@
         </div>
     </div>
 
-    <x-ui-modal wire:model="rateModalShow" size="md">
+    <x-ui-modal model="rateModalShow" size="md">
         <x-slot name="header">{{ $editingRateId ? 'Edit' : 'Create' }} VAT Rate</x-slot>
 
         <form wire:submit.prevent="saveRate" class="space-y-4">
@@ -113,9 +113,23 @@
         </form>
 
         <x-slot name="footer">
-            <div class="d-flex justify-end gap-2">
-                <x-ui-button type="button" variant="secondary-outline" wire:click="closeRateModal">Cancel</x-ui-button>
-                <x-ui-button type="button" variant="primary" wire:click="saveRate">Save</x-ui-button>
+            <div class="d-flex justify-between items-center gap-2">
+                <div class="flex-shrink-0">
+                    @if($editingRateId)
+                        <x-ui-confirm-button 
+                            action="deleteRate"
+                            :args="[$editingRateId]"
+                            text="Delete" 
+                            confirmText="Wirklich löschen?" 
+                            variant="danger-outline"
+                            :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
+                        />
+                    @endif
+                </div>
+                <div class="d-flex justify-end gap-2 flex-shrink-0">
+                    <x-ui-button type="button" variant="secondary-outline" wire:click="closeRateModal">Cancel</x-ui-button>
+                    <x-ui-button type="button" variant="primary" wire:click="saveRate">Save</x-ui-button>
+                </div>
             </div>
         </x-slot>
     </x-ui-modal>

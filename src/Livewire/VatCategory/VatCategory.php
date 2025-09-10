@@ -128,6 +128,13 @@ class VatCategory extends Component
         $this->closeRateModal();
     }
 
+    public function deleteRate(int $rateId): void
+    {
+        $rate = $this->category->rates()->findOrFail($rateId);
+        $rate->delete();
+        $this->closeRateModal();
+    }
+
     public function render()
     {
         $rates = $this->category->rates()->orderByDesc('valid_from')->get();
