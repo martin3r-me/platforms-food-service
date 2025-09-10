@@ -18,6 +18,9 @@ class FsVatCategory extends Model
         'name',
         'description',
         'is_active',
+        'team_id',
+        'created_by_user_id',
+        'owned_by_user_id',
     ];
 
     protected $casts = [

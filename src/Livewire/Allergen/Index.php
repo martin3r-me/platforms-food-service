@@ -45,6 +45,9 @@ class Index extends Component
             'is_strict' => $this->is_strict,
             'is_active' => true,
             'parent_id' => $this->parent_id,
+            'team_id' => auth()->user()->current_team_id ?? null,
+            'created_by_user_id' => auth()->id() ?? null,
+            'owned_by_user_id' => auth()->id() ?? null,
         ]);
 
         $this->closeCreateModal();

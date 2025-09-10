@@ -42,6 +42,9 @@ class Index extends Component
             'name' => $this->name,
             'description' => $this->description,
             'is_active' => $this->is_active,
+            'team_id' => auth()->user()->current_team_id ?? null,
+            'created_by_user_id' => auth()->id() ?? null,
+            'owned_by_user_id' => auth()->id() ?? null,
         ]);
 
         $this->closeCreateModal();

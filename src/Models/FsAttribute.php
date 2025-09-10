@@ -19,6 +19,9 @@ class FsAttribute extends Model
         'is_strict',
         'is_active',
         'parent_id',
+        'team_id',
+        'created_by_user_id',
+        'owned_by_user_id',
     ];
 
     protected $casts = [
