@@ -67,5 +67,31 @@
             <x-heroicon-o-banknotes class="w-6 h-6 flex-shrink-0"/>
             <span x-show="!collapsed" class="truncate">VAT Categories</span>
         </a>
+
+        <a href="{{ route('foodservice.article-clusters.index') }}"
+           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
+           :class="[
+               window.location.pathname.includes('/article-clusters')
+                   ? 'bg-primary text-on-primary shadow-md'
+                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
+               collapsed ? 'justify-center' : 'gap-3'
+           ]"
+           wire:navigate>
+            <x-heroicon-o-rectangle-group class="w-6 h-6 flex-shrink-0"/>
+            <span x-show="!collapsed" class="truncate">Article Clusters</span>
+        </a>
+
+        <a href="{{ route('foodservice.article-categories.index') }}"
+           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
+           :class="[
+               window.location.pathname.includes('/article-categories')
+                   ? 'bg-primary text-on-primary shadow-md'
+                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
+               collapsed ? 'justify-center' : 'gap-3'
+           ]"
+           wire:navigate>
+            <x-heroicon-o-tag class="w-6 h-6 flex-shrink-0"/>
+            <span x-show="!collapsed" class="truncate">Article Categories</span>
+        </a>
     </div>
 </div>
