@@ -14,7 +14,7 @@ class Brand extends Component
 
     public function mount(FsBrand $brand): void
     {
-        $this->brand = $brand;
+        $this->brand = $brand->load('manufacturers');
     }
 
     protected function rules(): array
@@ -53,6 +53,7 @@ class Brand extends Component
             ->get();
 
         return view('foodservice::livewire.brand.brand', [
+            'brand' => $this->brand,
             'manufacturers' => $manufacturers,
         ])->layout('platform::layouts.app');
     }

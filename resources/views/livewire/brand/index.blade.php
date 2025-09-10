@@ -88,7 +88,7 @@
                 </div>
             </div>
             
-            <x-ui-input-checkbox model="is_active" checked-label="Active" unchecked-label="Inactive" />
+            <x-ui-input-checkbox wire:model.live="is_active" checked-label="Active" unchecked-label="Inactive" />
         </form>
 
         <x-slot name="footer">
