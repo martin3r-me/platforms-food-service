@@ -1,0 +1,26 @@
+{
+    "name": "martin3r/platform-food-service",
+    "description": "Food Service Module for Platform",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Platform Team",
+            "email": "team@platform.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Platform\\FoodService\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Platform\\FoodService\\FoodServiceServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
