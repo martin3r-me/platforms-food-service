@@ -127,8 +127,8 @@ class Index extends Component
         $article = FsArticle::create([
             'name' => $this->name,
             'description' => $this->description,
-            'article_number' => $this->article_number,
-            'ean' => $this->ean,
+            'article_number' => $this->article_number ?: null,
+            'ean' => $this->ean ?: null,
             'brand_id' => $this->brand_id ?: null,
             'manufacturer_id' => $this->manufacturer_id ?: null,
             'article_category_id' => $this->article_category_id ?: null,

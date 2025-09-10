@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('article_number')->unique();
+            $table->string('article_number')->nullable()->unique();
             $table->string('ean')->nullable();
             
             // Foreign Keys
