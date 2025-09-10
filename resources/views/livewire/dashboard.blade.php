@@ -3,7 +3,7 @@
         <div class="d-flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">Food Service Dashboard</h1>
-                <p class="text-gray-600">Aktuelle Übersicht</p>
+                <p class="text-gray-600">Aktuelle Übersicht!!</p>
             </div>
         </div>
     </div>
