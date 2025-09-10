@@ -24,6 +24,8 @@ use Platform\FoodService\Livewire\Manufacturer\Index as ManufacturerIndex;
 use Platform\FoodService\Livewire\Manufacturer\Manufacturer as ManufacturerShow;
 use Platform\FoodService\Livewire\Supplier\Index as SupplierIndex;
 use Platform\FoodService\Livewire\Supplier\Show as SupplierShow;
+use Platform\FoodService\Livewire\Article\Index as ArticleIndex;
+use Platform\FoodService\Livewire\Article\Show as ArticleShow;
 
 Route::get('/', FoodServiceDashboard::class)->name('foodservice.dashboard');
 
@@ -70,6 +72,10 @@ Route::get('/manufacturers/{manufacturer}', ManufacturerShow::class)->name('food
 // Suppliers
 Route::get('/suppliers', SupplierIndex::class)->name('foodservice.suppliers.index');
 Route::get('/suppliers/{supplier}', SupplierShow::class)->name('foodservice.suppliers.show');
+
+// Articles
+Route::get('/articles', ArticleIndex::class)->name('foodservice.articles.index');
+Route::get('/articles/{article}', ArticleShow::class)->name('foodservice.articles.show');
 
 
 
