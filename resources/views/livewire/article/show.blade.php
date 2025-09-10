@@ -366,7 +366,7 @@
     </div>
 
     <!-- Allergen Modal -->
-    <x-ui-modal wire:model.live="allergenModalShow" size="md">
+    <x-ui-modal wire:model="allergenModalShow" size="md">
         <x-slot name="header">
             <div class="d-flex items-center gap-2">
                 @svg('heroicon-o-exclamation-triangle', 'w-6 h-6 text-warning')
@@ -410,7 +410,7 @@
     </x-ui-modal>
 
     <!-- Additive Modal -->
-    <x-ui-modal wire:model.live="additiveModalShow" size="md">
+    <x-ui-modal wire:model="additiveModalShow" size="md">
         <x-slot name="header">
             <div class="d-flex items-center gap-2">
                 @svg('heroicon-o-beaker', 'w-6 h-6 text-info')
@@ -454,7 +454,7 @@
     </x-ui-modal>
 
     <!-- Attribute Modal -->
-    <x-ui-modal wire:model.live="attributeModalShow" size="md">
+    <x-ui-modal wire:model="attributeModalShow" size="md">
         <x-slot name="header">
             <div class="d-flex items-center gap-2">
                 @svg('heroicon-o-tag', 'w-6 h-6 text-primary')
