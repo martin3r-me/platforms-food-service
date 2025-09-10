@@ -26,8 +26,7 @@ class Show extends Component
     public $modalShow = false;
     public $modalType = '';
     
-    // Edit Modal
-    public $editModalShow = false; // 'allergen', 'additive', 'attribute'
+ // 'allergen', 'additive', 'attribute'
     
     // Track if form is dirty
     public $isDirty = false;
@@ -99,16 +98,6 @@ class Show extends Component
             'newSupplierArticle.delivery_time_days' => 'nullable|integer|min:0',
             'newSupplierArticle.notes' => 'nullable|string',
             'newSupplierArticle.is_active' => 'boolean',
-            // Edit Supplier Article validation rules
-            'editSupplierArticle.supplier_id' => 'required|exists:fs_suppliers,id',
-            'editSupplierArticle.supplier_article_number' => 'nullable|string|max:255',
-            'editSupplierArticle.supplier_ean' => 'nullable|string|max:255',
-            'editSupplierArticle.purchase_price' => 'nullable|numeric|min:0',
-            'editSupplierArticle.currency' => 'required|string|max:3',
-            'editSupplierArticle.minimum_order_quantity' => 'nullable|integer|min:1',
-            'editSupplierArticle.delivery_time_days' => 'nullable|integer|min:0',
-            'editSupplierArticle.notes' => 'nullable|string',
-            'editSupplierArticle.is_active' => 'boolean',
         ];
     }
 
@@ -142,20 +131,24 @@ class Show extends Component
             $this->selectedAdditives = $this->article->additives->pluck('id')->toArray();
         } elseif ($type === 'attribute') {
             $this->selectedAttributes = $this->article->attributes->pluck('id')->toArray();
+        } elseif ($type === 'supplier') {
+            $this->resetSupplierArticleForm();
+            // Ersten Lieferanten vorauswählen
+            $firstSupplier = $this->availableSuppliers->first();
+            if ($firstSupplier) {
+                $this->newSupplierArticle['supplier_id'] = $firstSupplier->id;
+            }
         }
-    }
-
-    public function openCreateModal()
-    {
-        $this->resetSupplierArticleForm();
-        $this->modalType = 'supplier';
-        $this->modalShow = true;
     }
 
     public function closeModal()
     {
         $this->modalShow = false;
         $this->modalType = '';
+        $this->editingSupplierArticleId = null;
+        if ($this->modalType === 'supplier') {
+            $this->resetSupplierArticleForm();
+        }
     }
 
     public function saveRelationships()
@@ -300,18 +293,6 @@ class Show extends Component
     ];
     public $editingSupplierArticleId = null;
     
-    // Edit Supplier Article Form
-    public $editSupplierArticle = [
-        'supplier_id' => '',
-        'supplier_article_number' => '',
-        'supplier_ean' => '',
-        'purchase_price' => '',
-        'currency' => 'EUR',
-        'minimum_order_quantity' => '',
-        'delivery_time_days' => '',
-        'notes' => '',
-        'is_active' => true,
-    ];
 
     public function getAvailableSuppliersProperty()
     {
@@ -377,11 +358,11 @@ class Show extends Component
         session()->flash('message', $message);
     }
 
-    public function openEditModal($supplierArticleId)
+    public function editSupplierArticle($supplierArticleId)
     {
         $supplierArticle = \Platform\FoodService\Models\FsSupplierArticle::find($supplierArticleId);
         if ($supplierArticle) {
-            $this->editSupplierArticle = [
+            $this->newSupplierArticle = [
                 'supplier_id' => $supplierArticle->supplier_id,
                 'supplier_article_number' => $supplierArticle->supplier_article_number,
                 'supplier_ean' => $supplierArticle->supplier_ean,
@@ -393,63 +374,9 @@ class Show extends Component
                 'is_active' => $supplierArticle->is_active,
             ];
             $this->editingSupplierArticleId = $supplierArticleId;
-            $this->editModalShow = true;
+            $this->modalType = 'supplier';
+            $this->modalShow = true;
         }
-    }
-
-    public function closeEditModal()
-    {
-        $this->editModalShow = false;
-        $this->editingSupplierArticleId = null;
-        $this->resetEditSupplierArticleForm();
-    }
-
-    public function updateSupplierArticle()
-    {
-        $this->validate([
-            'editSupplierArticle.supplier_id' => 'required|exists:fs_suppliers,id',
-            'editSupplierArticle.supplier_article_number' => 'nullable|string|max:255',
-            'editSupplierArticle.supplier_ean' => 'nullable|string|max:255',
-            'editSupplierArticle.purchase_price' => 'nullable|numeric|min:0',
-            'editSupplierArticle.currency' => 'required|string|max:3',
-            'editSupplierArticle.minimum_order_quantity' => 'nullable|integer|min:1',
-            'editSupplierArticle.delivery_time_days' => 'nullable|integer|min:0',
-            'editSupplierArticle.notes' => 'nullable|string',
-            'editSupplierArticle.is_active' => 'boolean',
-        ]);
-
-        $supplierArticle = \Platform\FoodService\Models\FsSupplierArticle::find($this->editingSupplierArticleId);
-        if ($supplierArticle) {
-            $supplierArticle->update([
-                'supplier_id' => $this->editSupplierArticle['supplier_id'],
-                'supplier_article_number' => $this->editSupplierArticle['supplier_article_number'] ?: null,
-                'supplier_ean' => $this->editSupplierArticle['supplier_ean'] ?: null,
-                'purchase_price' => $this->editSupplierArticle['purchase_price'] ?: null,
-                'currency' => $this->editSupplierArticle['currency'],
-                'minimum_order_quantity' => $this->editSupplierArticle['minimum_order_quantity'] ?: null,
-                'delivery_time_days' => $this->editSupplierArticle['delivery_time_days'] ?: null,
-                'notes' => $this->editSupplierArticle['notes'] ?: null,
-                'is_active' => $this->editSupplierArticle['is_active'],
-            ]);
-
-            $this->closeEditModal();
-            session()->flash('message', 'Lieferanten-Artikel erfolgreich aktualisiert!');
-        }
-    }
-
-    private function resetEditSupplierArticleForm()
-    {
-        $this->editSupplierArticle = [
-            'supplier_id' => '',
-            'supplier_article_number' => '',
-            'supplier_ean' => '',
-            'purchase_price' => '',
-            'currency' => 'EUR',
-            'minimum_order_quantity' => '',
-            'delivery_time_days' => '',
-            'notes' => '',
-            'is_active' => true,
-        ];
     }
 
     public function deleteSupplierArticle($supplierArticleId)
