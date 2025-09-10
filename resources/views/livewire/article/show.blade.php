@@ -541,5 +541,5 @@
     </x-ui-modal>
 
     <!-- Supplier Modal -->
-    <livewire:article.supplier-modal :article="$article" />
+    <livewire:food-service::article.supplier-modal :article="$article" />
 </div>
