@@ -88,16 +88,6 @@ class Show extends Component
             'article.is_active' => 'boolean',
             'settingsForm.description' => 'nullable|string',
             'settingsForm.is_active' => 'boolean',
-            // Supplier Article validation rules
-            'newSupplierArticle.supplier_id' => 'required|exists:fs_suppliers,id',
-            'newSupplierArticle.supplier_article_number' => 'nullable|string|max:255',
-            'newSupplierArticle.supplier_ean' => 'nullable|string|max:255',
-            'newSupplierArticle.purchase_price' => 'nullable|numeric|min:0',
-            'newSupplierArticle.currency' => 'required|string|max:3',
-            'newSupplierArticle.minimum_order_quantity' => 'nullable|integer|min:1',
-            'newSupplierArticle.delivery_time_days' => 'nullable|integer|min:0',
-            'newSupplierArticle.notes' => 'nullable|string',
-            'newSupplierArticle.is_active' => 'boolean',
         ];
     }
 
@@ -170,6 +160,10 @@ class Show extends Component
                 $this->article->attributes()->sync($this->selectedAttributes);
                 $this->article->load(['attributes']);
                 session()->flash('message', 'Attribute erfolgreich gespeichert.');
+                break;
+                
+            case 'supplier':
+                $this->saveSupplierArticle();
                 break;
         }
         
@@ -354,8 +348,7 @@ class Show extends Component
         }
 
         $this->resetSupplierArticleForm();
-        $this->closeModal();
-        session()->flash('message', $message);
+        // Modal wird in saveRelationships geschlossen
     }
 
     public function editSupplierArticle($supplierArticleId)
