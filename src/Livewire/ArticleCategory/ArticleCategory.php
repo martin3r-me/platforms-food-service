@@ -48,6 +48,22 @@ class ArticleCategory extends Component
     {
         if (str_starts_with($prop, 'category.')) {
             $this->isDirty = true;
+
+            // Wenn Parent geändert wird: Cluster automatisch an Parent angleichen
+            if ($prop === 'category.parent_id' && $this->category->parent_id) {
+                $parent = FsArticleCategory::find($this->category->parent_id);
+                if ($parent) {
+                    $this->category->cluster_id = $parent->cluster_id;
+                }
+            }
+
+            // Wenn Cluster geändert wird: Ungültigen Parent zurücksetzen
+            if ($prop === 'category.cluster_id' && $this->category->parent_id) {
+                $parent = FsArticleCategory::find($this->category->parent_id);
+                if ($parent && $parent->cluster_id !== $this->category->cluster_id) {
+                    $this->category->parent_id = null;
+                }
+            }
         }
     }
 

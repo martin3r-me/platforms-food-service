@@ -30,14 +30,6 @@
                                     Save
                                 </div>
                             </x-ui-button>
-                            <x-ui-confirm-button 
-                                action="deleteItem" 
-                                text="Delete" 
-                                confirmText="Wirklich löschen?" 
-                                variant="danger-outline"
-                                size="sm"
-                                :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
-                            />
                         @endif
                     </div>
                 </div>
@@ -188,6 +180,17 @@
                     unchecked-label="Inactive"
                     size="md"
                     block="true"
+                />
+
+                <hr>
+
+                <x-ui-confirm-button 
+                    action="deleteItem" 
+                    text="Delete" 
+                    confirmText="Wirklich löschen?" 
+                    variant="danger-outline"
+                    size="sm"
+                    :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
                 />
             </div>
         </div>
