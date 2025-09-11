@@ -18,6 +18,7 @@ class ArticleCategory extends Component
     public ?int $cluster_id = null;
     public ?int $parent_id = null;
     public ?int $selectedParentId = null;
+    private ?int $originalClusterId = null;
 
     protected function rules(): array
     {
@@ -42,6 +43,7 @@ class ArticleCategory extends Component
     public function mount(FsArticleCategory $category): void
     {
         $this->category = $category;
+        $this->originalClusterId = $category->cluster_id;
     }
 
     public function updated($prop): void
@@ -59,9 +61,11 @@ class ArticleCategory extends Component
 
             // Wenn Cluster geändert wird: Ungültigen Parent zurücksetzen
             if ($prop === 'category.cluster_id' && $this->category->parent_id) {
+                // Cluster-Änderung bei vorhandenen Parent nicht zulassen → zurücksetzen auf Parent-Cluster
                 $parent = FsArticleCategory::find($this->category->parent_id);
                 if ($parent && $parent->cluster_id !== $this->category->cluster_id) {
-                    $this->category->parent_id = null;
+                    $this->category->cluster_id = $parent->cluster_id;
+                    $this->addError('category.cluster_id', 'Cluster kann nicht geändert werden, solange ein Parent gesetzt ist.');
                 }
             }
         }
@@ -80,8 +84,28 @@ class ArticleCategory extends Component
             }
         }
 
+        $clusterChanged = $this->originalClusterId !== $this->category->cluster_id;
+
         $this->category->save();
+
+        // Wenn Cluster geändert wurde (nur möglich ohne Parent): Kinder rekursiv aktualisieren
+        if ($clusterChanged) {
+            $this->updateDescendantsCluster($this->category, $this->category->cluster_id);
+            $this->originalClusterId = $this->category->cluster_id;
+        }
         $this->isDirty = false;
+    }
+
+    private function updateDescendantsCluster(FsArticleCategory $category, int $newClusterId): void
+    {
+        $children = FsArticleCategory::where('parent_id', $category->id)->get();
+        foreach ($children as $child) {
+            if ($child->cluster_id !== $newClusterId) {
+                $child->cluster_id = $newClusterId;
+                $child->save();
+            }
+            $this->updateDescendantsCluster($child, $newClusterId);
+        }
     }
 
     /**

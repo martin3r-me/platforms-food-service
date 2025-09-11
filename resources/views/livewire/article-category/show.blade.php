@@ -54,6 +54,7 @@
                             optionLabel="name"
                             :nullable="false"
                             wire:model.live="category.cluster_id"
+                            :disabled="$category->parent_id !== null"
                             required
                         />
                     </div>
