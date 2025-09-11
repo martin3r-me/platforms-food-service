@@ -91,6 +91,7 @@ class Index extends Component
     public function availableArticleCategories()
     {
         return FsArticleCategory::where('is_active', true)
+            ->whereNull('deleted_at')
             ->orderBy('name')
             ->get();
     }
