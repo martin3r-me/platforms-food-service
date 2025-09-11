@@ -127,9 +127,20 @@ class ArticleCategory extends Component
 
     public function deleteItem(): void
     {
+        // Kinder rekursiv soft-deleten, dann aktuelle Kategorie
+        $this->deleteDescendants($this->category);
         $this->category->delete();
         session()->flash('message', 'Kategorie erfolgreich gelöscht.');
         redirect()->route('foodservice.article-categories.index');
+    }
+
+    private function deleteDescendants(FsArticleCategory $category): void
+    {
+        $children = FsArticleCategory::where('parent_id', $category->id)->get();
+        foreach ($children as $child) {
+            $this->deleteDescendants($child);
+            $child->delete();
+        }
     }
 
     public function getCategoryParentOptionsProperty()
