@@ -53,7 +53,8 @@ class ArticleCategory extends Component
 
     public function save(): void
     {
-        $this->validate();
+        // Nur Kategorie-Felder validieren (nicht die Create-Modal Felder)
+        $this->validate($this->categoryFieldRules());
         // parent muss gleiche cluster_id haben
         if ($this->category->parent_id) {
             $parent = FsArticleCategory::find($this->category->parent_id);
@@ -65,6 +66,30 @@ class ArticleCategory extends Component
 
         $this->category->save();
         $this->isDirty = false;
+    }
+
+    /**
+     * Regeln nur für die bestehenden Kategorie-Felder (Show-Seite).
+     */
+    private function categoryFieldRules(): array
+    {
+        return [
+            'category.name' => ['required', 'string', 'max:255'],
+            'category.description' => ['nullable', 'string'],
+            'category.is_active' => ['boolean'],
+            'category.cluster_id' => ['required', 'integer', 'exists:fs_article_clusters,id'],
+            'category.parent_id' => [
+                'nullable', 'integer', 'exists:fs_article_categories,id',
+                Rule::notIn([$this->category->id]),
+            ],
+        ];
+    }
+
+    public function deleteItem(): void
+    {
+        $this->category->delete();
+        session()->flash('message', 'Kategorie erfolgreich gelöscht.');
+        redirect()->route('foodservice.article-categories.index');
     }
 
     public function getCategoryParentOptionsProperty()
