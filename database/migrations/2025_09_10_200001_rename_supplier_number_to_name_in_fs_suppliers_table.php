@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('fs_suppliers', function (Blueprint $table) {
-            $table->renameColumn('supplier_number', 'name');
-        });
+        if (Schema::hasTable('fs_suppliers') && Schema::hasColumn('fs_suppliers', 'supplier_number') && !Schema::hasColumn('fs_suppliers', 'name')) {
+            Schema::table('fs_suppliers', function (Blueprint $table) {
+                $table->renameColumn('supplier_number', 'name');
+            });
+        }
     }
 
     /**
@@ -21,8 +23,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('fs_suppliers', function (Blueprint $table) {
-            $table->renameColumn('name', 'supplier_number');
-        });
+        if (Schema::hasTable('fs_suppliers') && Schema::hasColumn('fs_suppliers', 'name') && !Schema::hasColumn('fs_suppliers', 'supplier_number')) {
+            Schema::table('fs_suppliers', function (Blueprint $table) {
+                $table->renameColumn('name', 'supplier_number');
+            });
+        }
     }
 };
