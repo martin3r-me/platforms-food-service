@@ -67,6 +67,11 @@ class FoodServiceServiceProvider extends ServiceProvider
         // Schritt 6: Views & Livewire
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'foodservice');
         Blade::component('foodservice-page', \Platform\FoodService\View\Components\Page::class);
+
+        $aliases = Blade::getClassComponentAliases();
+        if (!array_key_exists('ui-empty-state', $aliases)) {
+            Blade::component('foodservice::components.empty-state', 'ui-empty-state');
+        }
         $this->registerLivewireComponents();
     }
 
