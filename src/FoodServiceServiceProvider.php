@@ -2,6 +2,7 @@
 
 namespace Platform\FoodService;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -65,6 +66,7 @@ class FoodServiceServiceProvider extends ServiceProvider
 
         // Schritt 6: Views & Livewire
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'foodservice');
+        Blade::component('foodservice-page', \Platform\FoodService\View\Components\Page::class);
         $this->registerLivewireComponents();
     }
 

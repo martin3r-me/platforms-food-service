@@ -1,32 +1,58 @@
+<x-foodservice-page
+    :title="$brand->name"
+    icon="heroicon-o-star"
+    :breadcrumbs="[
+        ['label' => 'Marken', 'href' => route('foodservice.brands.index')],
+    ]"
+>
+    <x-slot name="actions">
+        <x-ui-button variant="secondary-outline" :href="route('foodservice.brands.index')" wire:navigate>
+            @svg('heroicon-o-arrow-left','w-4 h-4')
+            Übersicht
+        </x-ui-button>
+        @if($this->isDirty)
+            <x-ui-button variant="primary" wire:click="save">
+                @svg('heroicon-o-check','w-4 h-4')
+                Speichern
+            </x-ui-button>
+        @endif
+    </x-slot>
+
+    <x-slot name="sidebar">
+        <div class="space-y-3">
+            <div class="p-3 rounded border border-[var(--ui-border)]/40 bg-[var(--ui-muted-5)]">
+                <p class="text-xs text-[var(--ui-muted)] uppercase tracking-wider">Status</p>
+                <x-ui-badge :variant="$brand->is_active ? 'success' : 'secondary'" size="sm">
+                    {{ $brand->is_active ? 'Aktiv' : 'Inaktiv' }}
+                </x-ui-badge>
+            </div>
+            <x-ui-input-checkbox
+                model="brand.is_active"
+                checked-label="Aktiv"
+                unchecked-label="Inaktiv"
+                size="md"
+                block="true"
+            />
+            <x-ui-confirm-button 
+                action="deleteItem" 
+                text="Löschen" 
+                confirmText="Wirklich löschen?" 
+                variant="danger-outline"
+                :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
+            />
+        </div>
+    </x-slot>
+
+    <x-slot name="activity">
+        <livewire:activity-log.index
+            :model="$brand"
+            :key="'brand_' . $brand->id"
+        />
+    </x-slot>
+
 <div class="d-flex h-full">
     <!-- Linke Spalte -->
     <div class="flex-grow-1 d-flex flex-col">
-        <!-- Header oben (fix) -->
-        <div class="border-top-1 border-bottom-1 border-muted border-top-solid border-bottom-solid p-2 flex-shrink-0">
-            <div class="d-flex gap-1">
-                <div class="d-flex">
-                    <a href="{{ route('foodservice.brands.index') }}" class="d-flex px-3 border-right-solid border-right-1 border-right-muted underline" wire:navigate>
-                        Brands
-                    </a>
-                </div>
-                <div class="flex-grow-1 text-right d-flex items-center justify-end gap-2">
-                    <span>{{ $brand->name }}</span>
-                    @if($this->isDirty)
-                        <x-ui-button 
-                            variant="primary" 
-                            size="sm"
-                            wire:click="save"
-                        >
-                            <div class="d-flex items-center gap-2">
-                                @svg('heroicon-o-check', 'w-4 h-4')
-                                Save
-                            </div>
-                        </x-ui-button>
-                    @endif
-                </div>
-            </div>
-        </div>
-
         <!-- Haupt-Content -->
         <div class="flex-grow-1 overflow-y-auto p-4">
             <div class="mb-6">
@@ -73,32 +99,7 @@
             </div>
         </div>
 
-        <!-- Aktivitäten -->
-        <div x-data="{ open: false }" class="flex-shrink-0 border-t border-muted">
-            <div 
-                @click="open = !open" 
-                class="cursor-pointer border-top-1 border-top-solid border-top-muted border-bottom-1 border-bottom-solid border-bottom-muted p-2 text-center d-flex items-center justify-center gap-1 mx-2 shadow-lg"
-            >
-                ACTIVITIES
-                <span class="text-xs">
-                    {{$brand->activities->count()}}
-                </span>
-                <x-heroicon-o-chevron-double-down 
-                    class="w-3 h-3" 
-                    x-show="!open"
-                />
-                <x-heroicon-o-chevron-double-up 
-                    class="w-3 h-3" 
-                    x-show="open"
-                />
-            </div>
-            <div x-show="open" class="p-2 max-h-xs overflow-y-auto">
-                <livewire:activity-log.index
-                    :model="$brand"
-                    :key="'brand_' . $brand->id"
-                />
-            </div>
-        </div>
+        <div class="flex-shrink-0 border-t border-muted"></div>
     </div>
 
     <!-- Rechte Spalte -->
@@ -116,23 +117,10 @@
                 </div>
             </div>
 
-            <x-ui-input-checkbox
-                model="brand.is_active"
-                checked-label="Active"
-                unchecked-label="Inactive"
-                size="md"
-                block="true"
-            />
-
-            <hr>
-
-            <x-ui-confirm-button 
-                action="deleteItem" 
-                text="Delete" 
-                confirmText="Wirklich löschen?" 
-                variant="danger-outline"
-                :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
-            />
+            <div class="text-sm text-[var(--ui-muted)]">
+                Weitere Einstellungen können später ergänzt werden.
+            </div>
         </div>
     </div>
 </div>
+</x-foodservice-page>

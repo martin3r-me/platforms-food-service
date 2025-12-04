@@ -1,7 +1,28 @@
-<div>
-    <div class="d-flex justify-between items-center mb-4">
-        <h1 class="text-xl font-semibold">Storage Types</h1>
-        <x-ui-button variant="primary" wire:click="openCreateModal">New Storage Type</x-ui-button>
+<x-foodservice-page
+    title="Lagerarten"
+    icon="heroicon-o-archive-box"
+    description="Strukturiere Lagerarten und Hierarchien"
+>
+    <x-slot name="sidebar">
+        <div class="space-y-3">
+            <h3 class="text-sm font-semibold text-[var(--ui-secondary)] uppercase tracking-wider">Aktionen</h3>
+            <x-ui-button variant="primary" size="sm" class="w-full justify-center" wire:click="openCreateModal">
+                @svg('heroicon-o-plus','w-4 h-4')
+                Neue Lagerart
+            </x-ui-button>
+        </div>
+    </x-slot>
+
+    <x-slot name="activity">
+        <p class="text-sm text-[var(--ui-muted)]">Keine Aktivitäten verfügbar.</p>
+    </x-slot>
+
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-[var(--ui-muted)]">Alle Lagerarten inkl. Hierarchie</p>
+        <x-ui-button variant="primary" wire:click="openCreateModal">
+            @svg('heroicon-o-plus','w-4 h-4')
+            Neue Lagerart
+        </x-ui-button>
     </div>
 
     @if($items->count() > 0)
@@ -64,4 +85,4 @@
             </div>
         </x-slot>
     </x-ui-modal>
-</div>
+</x-foodservice-page>

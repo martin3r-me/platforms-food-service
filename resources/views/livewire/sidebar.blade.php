@@ -1,175 +1,131 @@
-<div>
-    <div>
-        <h4 x-show="!collapsed" class="p-3 text-sm italic text-secondary uppercase">General</h4>
+@php
+    $sections = [
+        [
+            'label' => 'Übersicht',
+            'items' => [
+                [
+                    'label' => 'Dashboard',
+                    'icon'  => 'heroicon-o-home',
+                    'route' => 'foodservice.dashboard',
+                    'active'=> ['foodservice.dashboard'],
+                ],
+            ],
+        ],
+        [
+            'label' => 'Artikelstamm',
+            'items' => [
+                [
+                    'label' => 'Artikel',
+                    'icon'  => 'heroicon-o-cube',
+                    'route' => 'foodservice.articles.index',
+                    'active'=> ['foodservice.articles.*'],
+                ],
+                [
+                    'label' => 'Lieferanten',
+                    'icon'  => 'heroicon-o-truck',
+                    'route' => 'foodservice.suppliers.index',
+                    'active'=> ['foodservice.suppliers.*'],
+                ],
+                [
+                    'label' => 'Hersteller',
+                    'icon'  => 'heroicon-o-building-office',
+                    'route' => 'foodservice.manufacturers.index',
+                    'active'=> ['foodservice.manufacturers.*'],
+                ],
+                [
+                    'label' => 'Marken',
+                    'icon'  => 'heroicon-o-star',
+                    'route' => 'foodservice.brands.index',
+                    'active'=> ['foodservice.brands.*'],
+                ],
+            ],
+        ],
+        [
+            'label' => 'Klassifizierungen',
+            'items' => [
+                [
+                    'label' => 'Artikelkategorien',
+                    'icon'  => 'heroicon-o-tag',
+                    'route' => 'foodservice.article-categories.index',
+                    'active'=> ['foodservice.article-categories.*'],
+                ],
+                [
+                    'label' => 'Artikelcluster',
+                    'icon'  => 'heroicon-o-rectangle-group',
+                    'route' => 'foodservice.article-clusters.index',
+                    'active'=> ['foodservice.article-clusters.*'],
+                ],
+                [
+                    'label' => 'Lagerarten',
+                    'icon'  => 'heroicon-o-archive-box',
+                    'route' => 'foodservice.storage-types.index',
+                    'active'=> ['foodservice.storage-types.*'],
+                ],
+                [
+                    'label' => 'Basiseinheiten',
+                    'icon'  => 'heroicon-o-scale',
+                    'route' => 'foodservice.base-units.index',
+                    'active'=> ['foodservice.base-units.*'],
+                ],
+                [
+                    'label' => 'MwSt-Kategorien',
+                    'icon'  => 'heroicon-o-banknotes',
+                    'route' => 'foodservice.vat-categories.index',
+                    'active'=> ['foodservice.vat-categories.*'],
+                ],
+            ],
+        ],
+        [
+            'label' => 'Kennzeichnungen',
+            'items' => [
+                [
+                    'label' => 'Allergene',
+                    'icon'  => 'heroicon-o-exclamation-triangle',
+                    'route' => 'foodservice.allergens.index',
+                    'active'=> ['foodservice.allergens.*'],
+                ],
+                [
+                    'label' => 'Zusatzstoffe',
+                    'icon'  => 'heroicon-o-beaker',
+                    'route' => 'foodservice.additives.index',
+                    'active'=> ['foodservice.additives.*'],
+                ],
+                [
+                    'label' => 'Attribute',
+                    'icon'  => 'heroicon-o-adjustments-horizontal',
+                    'route' => 'foodservice.attributes.index',
+                    'active'=> ['foodservice.attributes.*'],
+                ],
+            ],
+        ],
+    ];
+@endphp
 
-        <a href="{{ route('foodservice.dashboard') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.endsWith('/food-service') || 
-               window.location.pathname.endsWith('/food-service/')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-chart-bar class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Dashboard</span>
-        </a>
+<div class="space-y-8">
+    <x-sidebar-module-header module-name="Food Service" icon="heroicon-o-cake" />
 
-        <a href="{{ route('foodservice.allergens.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/allergens')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-exclamation-triangle class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Allergens</span>
-        </a>
-
-        <a href="{{ route('foodservice.additives.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/additives')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-beaker class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Additives</span>
-        </a>
-
-        <a href="{{ route('foodservice.attributes.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/attributes')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-adjustments-horizontal class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Attributes</span>
-        </a>
-
-        <a href="{{ route('foodservice.vat-categories.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/vat-categories')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-banknotes class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">VAT Categories</span>
-        </a>
-
-        <a href="{{ route('foodservice.article-clusters.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/article-clusters')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-rectangle-group class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Article Clusters</span>
-        </a>
-
-        <a href="{{ route('foodservice.article-categories.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/article-categories')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-tag class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Article Categories</span>
-        </a>
-
-        <a href="{{ route('foodservice.storage-types.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/storage-types')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-archive-box class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Storage Types</span>
-        </a>
-
-        <a href="{{ route('foodservice.base-units.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/base-units')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-scale class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Base Units</span>
-        </a>
-
-        <a href="{{ route('foodservice.brands.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/brands')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-star class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Brands</span>
-        </a>
-
-        <a href="{{ route('foodservice.manufacturers.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/manufacturers')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-building-office class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Manufacturers</span>
-        </a>
-
-        <a href="{{ route('foodservice.suppliers.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/suppliers')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-truck class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Suppliers</span>
-        </a>
-
-        <a href="{{ route('foodservice.articles.index') }}"
-           class="relative d-flex items-center p-2 my-1 rounded-md font-medium transition"
-           :class="[
-               window.location.pathname.includes('/articles')
-                   ? 'bg-primary text-on-primary shadow-md'
-                   : 'text-black hover:bg-primary-10 hover:text-primary hover:shadow-md',
-               collapsed ? 'justify-center' : 'gap-3'
-           ]"
-           wire:navigate>
-            <x-heroicon-o-cube class="w-6 h-6 flex-shrink-0"/>
-            <span x-show="!collapsed" class="truncate">Articles</span>
-        </a>
-    </div>
+    @foreach($sections as $section)
+        <div class="space-y-3">
+            <p class="text-xs font-semibold tracking-wide uppercase text-[var(--ui-muted)]">{{ $section['label'] }}</p>
+            <div class="space-y-1">
+                @foreach($section['items'] as $item)
+                    @php
+                        $isActive = request()->routeIs(...$item['active']);
+                    @endphp
+                    <a
+                        href="{{ route($item['route']) }}"
+                        wire:navigate
+                        class="flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                        @class([
+                            'bg-[var(--ui-primary)] text-[var(--ui-on-primary)] shadow-sm' => $isActive,
+                            'text-[var(--ui-secondary)] hover:bg-[var(--ui-primary-5)] hover:text-[var(--ui-primary)]' => !$isActive,
+                        ])
+                    >
+                        @svg($item['icon'], 'w-5 h-5')
+                        <span class="truncate">{{ $item['label'] }}</span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endforeach
 </div>

@@ -1,20 +1,49 @@
-<div>
-    <div class="d-flex justify-between items-center mb-4">
-        <h1 class="text-xl font-semibold">Base Units</h1>
-        <div class="d-flex gap-2">
+<x-foodservice-page
+    title="Basiseinheiten"
+    icon="heroicon-o-scale"
+    description="Verwalte Basiseinheiten und Kategorien für alle Artikel"
+>
+    <x-slot name="sidebar">
+        <div class="space-y-3">
+            @if($items->count() === 0)
+                <x-ui-button 
+                    variant="secondary-outline" 
+                    class="w-full justify-center"
+                    wire:click="seedDefaultUnits"
+                    wire:confirm="Es werden Standard-Kategorien für Gewicht, Volumen und Stück erzeugt. Fortfahren?"
+                >
+                    @svg('heroicon-o-sparkles', 'w-4 h-4')
+                    Standard-Einheiten anlegen
+                </x-ui-button>
+            @endif
+            <x-ui-button variant="primary" size="sm" class="w-full justify-center" wire:click="openCreateModal">
+                @svg('heroicon-o-plus','w-4 h-4')
+                Neue Kategorie
+            </x-ui-button>
+        </div>
+    </x-slot>
+
+    <x-slot name="activity">
+        <p class="text-sm text-[var(--ui-muted)]">Keine Aktivitäten verfügbar.</p>
+    </x-slot>
+
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-[var(--ui-muted)]">Basiseinheiten und zugehörige Kategorien</p>
+        <div class="flex gap-2">
             @if($items->count() === 0)
                 <x-ui-button 
                     variant="secondary" 
                     wire:click="seedDefaultUnits"
-                    wire:confirm="This will create default base units (Gewicht, Volumen, Stück) with all standard units. Continue?"
+                    wire:confirm="Es werden Standard-Kategorien für Gewicht, Volumen und Stück erzeugt. Fortfahren?"
                 >
-                    <div class="d-flex items-center gap-2">
-                        @svg('heroicon-o-sparkles', 'w-4 h-4')
-                        Seed Default Units
-                    </div>
+                    @svg('heroicon-o-sparkles', 'w-4 h-4')
+                    Standard-Einheiten
                 </x-ui-button>
             @endif
-            <x-ui-button variant="primary" wire:click="openCreateModal">New Category</x-ui-button>
+            <x-ui-button variant="primary" wire:click="openCreateModal">
+                @svg('heroicon-o-plus','w-4 h-4')
+                Neue Kategorie
+            </x-ui-button>
         </div>
     </div>
 
@@ -170,4 +199,4 @@
             </div>
         </x-slot>
     </x-ui-modal>
-</div>
+</x-foodservice-page>
