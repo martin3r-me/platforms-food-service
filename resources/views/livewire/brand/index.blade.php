@@ -4,17 +4,61 @@
     description="Markenübersicht für Artikelauswahl"
 >
     <x-slot name="sidebar">
-        <div class="space-y-3">
-            <h3 class="text-sm font-semibold text-[var(--ui-secondary)] uppercase tracking-wider">Aktionen</h3>
-            <x-ui-button variant="primary" size="sm" class="w-full justify-center" wire:click="openCreateModal">
-                @svg('heroicon-o-plus','w-4 h-4')
-                Neue Marke
-            </x-ui-button>
+        @php
+            $totalBrands = $items->count();
+            $activeBrands = $items->where('is_active', true)->count();
+        @endphp
+        <div class="space-y-6">
+            <div class="space-y-3">
+                <h3 class="text-sm font-semibold text-[var(--ui-secondary)] uppercase tracking-wider">Aktionen</h3>
+                <x-ui-button variant="primary" size="sm" class="w-full justify-center" wire:click="openCreateModal">
+                    @svg('heroicon-o-plus','w-4 h-4')
+                    Neue Marke
+                </x-ui-button>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-semibold text-[var(--ui-secondary)] uppercase tracking-wider mb-3">Kurzstatistik</h3>
+                <div class="space-y-2">
+                    <div class="p-3 rounded-lg border border-[var(--ui-border)]/40 bg-[var(--ui-muted-5)]">
+                        <p class="text-xs text-[var(--ui-muted)]">Gesamt</p>
+                        <p class="text-lg font-semibold text-[var(--ui-secondary)]">{{ $totalBrands }}</p>
+                    </div>
+                    <div class="p-3 rounded-lg border border-[var(--ui-border)]/40 bg-[var(--ui-muted-5)]">
+                        <p class="text-xs text-[var(--ui-muted)]">Aktiv</p>
+                        <p class="text-lg font-semibold text-[var(--ui-secondary)]">{{ $activeBrands }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </x-slot>
 
     <x-slot name="activity">
-        <p class="text-sm text-[var(--ui-muted)]">Keine Aktivitäten verfügbar.</p>
+        @php
+            $recentBrands = $items
+                ->sortByDesc(fn($item) => $item->updated_at ?? $item->created_at)
+                ->take(6);
+        @endphp
+        <div class="space-y-3">
+            <h3 class="text-sm font-semibold text-[var(--ui-secondary)] uppercase tracking-wider">Zuletzt bearbeitet</h3>
+            <div class="space-y-2">
+                @forelse($recentBrands as $recent)
+                    <a
+                        href="{{ route('foodservice.brands.show', ['brand' => $recent]) }}"
+                        wire:navigate
+                        class="flex items-center justify-between p-3 rounded-lg border border-[var(--ui-border)]/40 hover:border-[var(--ui-primary)]/60 transition-colors"
+                    >
+                        <div class="min-w-0">
+                            <p class="font-medium text-[var(--ui-secondary)] truncate">{{ $recent->name }}</p>
+                            <p class="text-xs text-[var(--ui-muted)]">{{ optional($recent->updated_at ?? $recent->created_at)->diffForHumans() }}</p>
+                        </div>
+                        @svg('heroicon-o-arrow-right','w-4 h-4 text-[var(--ui-muted)]')
+                    </a>
+                @empty
+                    <p class="text-sm text-[var(--ui-muted)]">Noch keine Einträge.</p>
+                @endforelse
+            </div>
+        </div>
     </x-slot>
 
     <div class="flex items-center justify-between mb-6">
