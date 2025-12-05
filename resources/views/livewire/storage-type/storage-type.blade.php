@@ -1,143 +1,46 @@
-<div class="d-flex h-full">
-    <!-- Linke Spalte -->
-    <div class="flex-grow-1 d-flex flex-col">
-        <!-- Header oben (fix) -->
-        <div class="border-top-1 border-bottom-1 border-muted border-top-solid border-bottom-solid p-2 flex-shrink-0">
-            <div class="d-flex gap-1">
-                <div class="d-flex">
-                    <a href="{{ route('foodservice.storage-types.index') }}" class="d-flex px-3 border-right-solid border-right-1 border-right-muted underline" wire:navigate>
-                        Storage Types
-                    </a>
-                </div>
-                <div class="flex-grow-1 text-right d-flex items-center justify-end gap-2">
-                    <span>{{ $storageType->name }}</span>
-                    @if($this->isDirty)
-                        <x-ui-button 
-                            variant="primary" 
-                            size="sm"
-                            wire:click="save"
-                        >
-                            <div class="d-flex items-center gap-2">
-                                @svg('heroicon-o-check', 'w-4 h-4')
-                                Save
-                            </div>
-                        </x-ui-button>
-                    @endif
-                </div>
-            </div>
-        </div>
+<x-foodservice-page
+    :title="$storageType->name"
+    icon="heroicon-o-archive-box"
+    :breadcrumbs="[
+        ['label' => 'Lagerarten', 'href' => route('foodservice.storage-types.index')],
+    ]"
+>
+    <x-slot name="actions">
+        <x-ui-button variant="secondary-outline" :href="route('foodservice.storage-types.index')" wire:navigate>
+            @svg('heroicon-o-arrow-left','w-4 h-4')
+            Übersicht
+        </x-ui-button>
+        @if($this->isDirty)
+            <x-ui-button variant="primary" wire:click="save">
+                @svg('heroicon-o-check','w-4 h-4')
+                Speichern
+            </x-ui-button>
+        @endif
+    </x-slot>
 
-        <!-- Haupt-Content -->
-        <div class="flex-grow-1 overflow-y-auto p-4">
-            <div class="mb-6">
-                <h3 class="text-lg font-semibold mb-4 text-secondary">Meta</h3>
-                <div class="grid grid-cols-2 gap-4">
-                    <x-ui-input-text 
-                        name="storageType.name"
-                        label="Name"
-                        wire:model.live="storageType.name"
-                        required
-                        :errorKey="'storageType.name'"
-                    />
-                </div>
-                <div class="mt-4">
-                    <x-ui-input-select
-                        name="storageType.parent_id"
-                        label="Parent"
-                        :options="$this->parentOptions"
-                        optionValue="id"
-                        optionLabel="name"
-                        :nullable="true"
-                        nullLabel="– None –"
-                        wire:model.live="storageType.parent_id"
-                    />
-                </div>
-
-                <div class="mt-4">
-                    <x-ui-input-textarea 
-                        name="storageType.description"
-                        label="Description"
-                        wire:model.live="storageType.description"
-                        rows="4"
-                        :errorKey="'storageType.description'"
-                    />
-                </div>
-            </div>
-            
-        </div>
-
-        <!-- Aktivitäten -->
-        <div x-data="{ open: false }" class="flex-shrink-0 border-t border-muted">
-            <div 
-                @click="open = !open" 
-                class="cursor-pointer border-top-1 border-top-solid border-top-muted border-bottom-1 border-bottom-solid border-bottom-muted p-2 text-center d-flex items-center justify-center gap-1 mx-2 shadow-lg"
-            >
-                ACTIVITIES
-                <span class="text-xs">
-                    {{$storageType->activities->count()}}
-                </span>
-                <x-heroicon-o-chevron-double-down 
-                    class="w-3 h-3" 
-                    x-show="!open"
-                />
-                <x-heroicon-o-chevron-double-up 
-                    class="w-3 h-3" 
-                    x-show="open"
-                />
-            </div>
-            <div x-show="open" class="p-2 max-h-xs overflow-y-auto">
-                <livewire:activity-log.index
-                    :model="$storageType"
-                    :key="get_class($storageType) . '_' . $storageType->id"
-                />
-            </div>
-        </div>
-    </div>
-
-    <!-- Rechte Spalte -->
-    <div class="min-w-80 w-80 d-flex flex-col border-left-1 border-left-solid border-left-muted">
-        <div class="d-flex gap-2 border-top-1 border-bottom-1 border-muted border-top-solid border-bottom-solid p-2 flex-shrink-0">
-            <x-heroicon-o-cog-6-tooth class="w-6 h-6"/>
-            Settings
-        </div>
-        <div class="flex-grow-1 overflow-y-auto p-4">
-            <div class="mb-4 p-3 bg-muted-5 rounded-lg">
-                <h4 class="font-semibold mb-2 text-secondary">Overview</h4>
-                <div class="space-y-1 text-sm">
-                    <div><strong>Name:</strong> {{ $storageType->name }}</div>
-                    <div><strong>Status:</strong> {{ $storageType->is_active ? 'Active' : 'Inactive' }}</div>
-                </div>
+    <x-slot name="sidebar">
+        <div class="space-y-6">
+            <div class="p-4 rounded-xl border border-[var(--ui-border)]/50 bg-[var(--ui-muted-5)]">
+                <h4 class="text-sm font-semibold text-[var(--ui-secondary)] mb-3">Status</h4>
+                <x-ui-badge :variant="$storageType->is_active ? 'success' : 'secondary'" size="sm">
+                    {{ $storageType->is_active ? 'Aktiv' : 'Inaktiv' }}
+                </x-ui-badge>
             </div>
 
-            <div class="mb-4">
-                <h4 class="font-semibold mb-2">Parent</h4>
-                <div class="space-y-2">
-                    <x-ui-input-select
-                        name="storageType.parent_id"
-                        :options="$this->parentOptions"
-                        optionValue="id"
-                        optionLabel="name"
-                        :nullable="true"
-                        nullLabel="– None –"
-                        wire:model.live="storageType.parent_id"
-                    />
-                    @if($storageType->parent)
-                        <div class="text-sm">
-                            Aktuell: 
-                            <a href="{{ route('foodservice.storage-types.show', ['storageType' => $storageType->parent]) }}" class="text-primary underline" wire:navigate>
-                                {{ $storageType->parent->name }}
-                            </a>
-                        </div>
-                    @endif
-                </div>
-            </div>
+            <x-ui-input-checkbox
+                model="storageType.is_active"
+                checked-label="Aktiv"
+                unchecked-label="Inaktiv"
+                size="md"
+                block="true"
+            />
 
             @if($storageType->children->count() > 0)
-                <div class="mb-4">
-                    <h4 class="font-semibold mb-2">Children</h4>
-                    <div class="space-y-1">
+                <div>
+                    <h4 class="text-sm font-semibold text-[var(--ui-secondary)] mb-2">Kinder</h4>
+                    <div class="space-y-1 text-sm">
                         @foreach($storageType->children as $child)
-                            <a href="{{ route('foodservice.storage-types.show', ['storageType' => $child]) }}" class="block text-sm text-primary underline" wire:navigate>
+                            <a href="{{ route('foodservice.storage-types.show', ['storageType' => $child]) }}" class="text-[var(--ui-primary)] hover:underline" wire:navigate>
                                 {{ $child->name }}
                             </a>
                         @endforeach
@@ -145,23 +48,64 @@
                 </div>
             @endif
 
-            <x-ui-input-checkbox
-                model="storageType.is_active"
-                checked-label="Active"
-                unchecked-label="Inactive"
-                size="md"
-                block="true"
-            />
-
-            <hr>
-
             <x-ui-confirm-button 
                 action="deleteItem" 
-                text="Delete" 
+                text="Löschen" 
                 confirmText="Wirklich löschen?" 
                 variant="danger-outline"
                 :icon="@svg('heroicon-o-trash', 'w-4 h-4')->toHtml()"
             />
         </div>
+    </x-slot>
+
+    <x-slot name="activity">
+        <livewire:activity-log.index
+            :model="$storageType"
+            :key="get_class($storageType) . '_' . $storageType->id"
+        />
+    </x-slot>
+
+    <div class="space-y-6">
+        <x-ui-panel title="Stammdaten">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <x-ui-input-text name="storageType.name" label="Name" wire:model.live="storageType.name" required :errorKey="'storageType.name'" />
+                <x-ui-input-select
+                    name="storageType.parent_id"
+                    label="Parent"
+                    :options="$this->parentOptions"
+                    optionValue="id"
+                    optionLabel="name"
+                    :nullable="true"
+                    nullLabel="– None –"
+                    wire:model.live="storageType.parent_id"
+                />
+            </div>
+
+            <div class="mt-4">
+                <x-ui-input-textarea 
+                    name="storageType.description"
+                    label="Beschreibung"
+                    wire:model.live="storageType.description"
+                    rows="4"
+                    :errorKey="'storageType.description'"
+                />
+            </div>
+        </x-ui-panel>
+
+        <x-ui-panel title="Beziehungen">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h4 class="text-sm font-semibold text-[var(--ui-secondary)] mb-2">Parent</h4>
+                    @if($storageType->parent)
+                        <a href="{{ route('foodservice.storage-types.show', ['storageType' => $storageType->parent]) }}" class="text-[var(--ui-primary)] hover:underline" wire:navigate>
+                            {{ $storageType->parent->name }}
+                        </a>
+                    @else
+                        <p class="text-sm text-[var(--ui-muted)]">Kein Parent zugewiesen.</p>
+                    @endif
+                </div>
+            </div>
+        </x-ui-panel>
     </div>
-</div>
+</x-foodservice-page>
+
