@@ -4,7 +4,6 @@ namespace Platform\FoodService;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Platform\Core\PlatformCore;
@@ -33,7 +32,7 @@ class FoodServiceServiceProvider extends ServiceProvider
         if (
             config()->has('foodservice.routing') &&
             config()->has('foodservice.navigation') &&
-            Schema::hasTable('modules')
+            PlatformCore::modulesTableExists()
         ) {
             PlatformCore::registerModule([
                 'key'        => 'foodservice',
